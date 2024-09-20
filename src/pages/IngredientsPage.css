@@ -1,0 +1,239 @@
+/* src/components/IngredientsPage.css */
+
+.ingredients-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Start slightly below */
+    padding-top: 6rem; /* Adjust this value to match the height of your navbar */
+    height: 100vh;
+  }
+  
+  h1 {
+    margin-bottom: 2rem;
+    font-size: 4rem;
+    color: #000;
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: normal;
+  }
+
+  span{
+    color: #0b3d0b;
+  }
+
+  .go {
+    color: #0b3d0b;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .ingredients-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    margin-left: 5%;
+    margin-right: 5%;
+    
+    max-height: 300px; /* Set the maximum height for the container */
+    overflow-y: scroll;  /* Enable scrolling */
+    padding: 1rem;
+    
+    border: 1px solid #ccc; /* Add a border */
+    border-radius: 1rem; /* Set border radius */
+    
+    /* Prevent the container from shrinking */
+    flex-shrink: 0;
+    
+    /* Hide scrollbar */
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none;  /* For Internet Explorer and Edge */
+  }
+  
+  .ingredients-container::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+  }
+  
+  .recipes-container {
+    justify-content: center;
+    margin-top: 20px;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem; /* Add some spacing between recipe cards */
+    
+    /* Set a minimum height to avoid shrinking */
+    min-height: 200px;
+  
+    /* Ensure it doesn't shrink either */
+    flex-shrink: 0;
+  }
+  
+  .recipe-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border: 1px solid #166d16;
+    border-radius: 8px;
+    padding: 10px;
+    padding-bottom: 35px;
+    margin: 10px;
+    width: 350px;
+    height: 150px;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .recipe-card:hover {
+    transform: scale(1.05);
+    background-color:#0b3d0b;
+    color: white;
+  }
+  
+  .recipe-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .recipe-card p {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+  }
+
+
+.ingredient-button {
+    border-radius: 1rem;
+    color: #000;
+    padding: 1rem;
+    margin: 0.5rem;
+    background-color: #fff;
+    border: 2px solid #166d16;
+    cursor: pointer;
+    font-size: .9rem;
+    transition: transform 0.2s, background-color 0.3s;
+  }
+  
+  .ingredient-button.selected {
+    background-color: #cccccc;
+    transform: scale(0.95);
+  }
+  
+  .ingredient-button:hover {
+    background-color: #166d16;
+    color: white;
+  }
+
+  /* Animation for selected ingredients */
+.selected-ingredient {
+  opacity: 0;
+  transform: scale(0.8);
+  animation: popOut 0.3s forwards;
+}
+
+/* Pop-out animation for selected ingredients */
+@keyframes popOut {
+  0% {
+      opacity: 0;
+      transform: scale(0.6);
+  }
+  100% {
+      opacity: 1;
+      transform: scale(.9);
+  }
+}
+  
+  button {
+    padding: 1rem;
+    border: 2px solid #166d16;
+    border-radius: .5rem;
+    font-size: large;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #085d08;
+    color: white;
+  }
+  
+  .selected-ingredients-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-top: 10px;
+    margin-bottom: 2rem;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+  .selected-ingredients-container button{
+    background-color: #166d16;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 1.2rem;
+    transition: transform 0.2s, background-color 0.3s;
+    border-radius: 1rem;
+  }
+
+  .selected-ingredients-container button:hover{
+    background-color: #7e2525;
+    color: white;
+  }
+
+  /* Style for the search bar */
+.ingredient-search {
+  width: 70%;
+  padding: 12px 20px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 25px;
+  outline: none;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Search bar focus style */
+.ingredient-search:focus {
+  border-color: #5cb85c; /* Green border on focus */
+  box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Style for dropdown overlay */
+.dropdown {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  max-height: 200px;
+  width: 80%;
+  overflow-y: auto;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  margin-top: -20px; /* Overlay effect to prevent dropdown from pushing content */
+}
+
+/* Dropdown item style */
+.dropdown-item {
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* Dropdown item hover effect */
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+}

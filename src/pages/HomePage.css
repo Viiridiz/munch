@@ -1,0 +1,165 @@
+/* src/components/Homepage.css */
+
+.homepage {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Full-screen height */
+}
+
+.top-panel {
+  padding-top: 100px;
+  width: 100%;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-image: url('../assets/homeimg.png'); /* Add your image here */
+  background-position: center;
+  padding: 2rem;
+  color: white; /* Ensure text stands out on the image */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.caption-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  max-width: 500px;
+  text-align: center;
+}
+
+.caption-box h1 {
+  font-size: 5rem;
+  font-weight: bold;
+  font-weight: normal;
+  font-family: 'Times New Roman', Times, serif;
+  color: black; /* Black text for better legibility */
+  margin-bottom: 1rem;
+}
+
+.caption-box span {
+  color: #0b3d0b; /* Dark forest green */
+}
+
+.caption-box p {
+  font-size: 1.4rem;
+  color: black; /* Black text for better legibility */
+  margin-bottom: 2rem;
+}
+
+.caption-box a {
+  display: inline-block;
+  background-color: #297229;
+  color: white;
+  padding: .6rem;
+  border-radius: 1rem;
+  text-decoration: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+
+.right-panel {
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  background-image: url('../assets/rightimg.jpg'); /* Add your background image here */
+  background-size: cover; /* Ensure the image covers the entire panel */
+  background-position: center; /* Center the image */
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center; /* Ensures all text is centered */
+}
+
+.reviews-container {
+  text-align: center;
+}
+
+.review {
+  margin-bottom: 2rem;
+}
+
+.star-rating {
+  display: flex;
+  justify-content: center;
+}
+
+.star {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0 0.5rem;
+  fill: #0b3d0b; /* Dark forest green */
+  transition: fill 0.3s ease;
+}
+
+.organization-name {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.store-buttons {
+  display: flex;
+  justify-content: center; /* Center buttons horizontally */
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.store-buttons img {
+  width: 150px;  /* Fixed width for both buttons */
+  height: 50px;  /* Fixed height for both buttons */
+  object-fit: contain; /* Ensure the image fits within the box without distortion */
+}
+
+.store-buttons img[alt="Google Play"] {
+  width: 150px;
+  height: 57px;
+}
+
+.start-button {
+  background-color: #0d570d;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+}
+
+.start-button:hover {
+  background-color: #085d08;
+}
+
+
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+  .homepage {
+    flex-direction: column;
+  }
+
+  .left-panel, .right-panel {
+    width: 100%;
+    height: 45vh; /* Adjust height for stacked layout */
+  }
+
+  .caption-box {
+    max-width: 80%;
+    padding: 1rem; /* Reduce padding on mobile */
+    top: 75%; /* Adjust top positioning for mobile */
+  }
+
+  .caption-box h1 {
+    font-size: 1.5rem; /* Reduce title size */
+  }
+
+  .caption-box p {
+    font-size: 0.9rem; /* Reduce paragraph text size */
+  }
+
+  .start-button {
+    font-size: 1rem; /* Reduce button text size for mobile */
+    padding: 0.8rem 1.5rem; /* Reduce button padding for mobile */
+  }
+}
