@@ -5,7 +5,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start; /* Start slightly below */
-    padding-top: 6rem; /* Adjust this value to match the height of your navbar */
+    padding-top: 5.5rem; /* Adjust this value to match the height of your navbar */
     height: 100vh;
   }
   
@@ -23,12 +23,16 @@
   }
 
   .go {
-    color: #0b3d0b;
+    color: #085d08;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-weight: bold;
     cursor: pointer;
   }
-  
+
+  .go:hover{
+    color: #085d08;
+    text-decoration: underline;
+  }
   .ingredients-container {
     display: flex;
     justify-content: center;
@@ -59,7 +63,6 @@
   
   .recipes-container {
     justify-content: center;
-    margin-top: 20px;
     align-items: center;
     display: flex;
     flex-wrap: wrap;
@@ -70,6 +73,8 @@
   
     /* Ensure it doesn't shrink either */
     flex-shrink: 0;
+    padding-top: 100px;
+    padding-bottom: 70px;
   }
   
   .recipe-card {
@@ -86,6 +91,7 @@
     text-align: center;
     align-items: center;
     justify-content: center;
+    transition: ease-in-out 0.1s;
   }
 
   .recipe-card:hover {
@@ -114,7 +120,7 @@
     border: 2px solid #166d16;
     cursor: pointer;
     font-size: .9rem;
-    transition: transform 0.2s, background-color 0.3s;
+    transition: transform 0.2s, background-color 0.1s;
   }
   
   .ingredient-button.selected {
@@ -155,7 +161,7 @@
     color: black;
     cursor: pointer;
     margin-top: 1rem;
-    transition: background-color 0.3s;
+    transition: background-color 0.1s;
   }
   
   button:hover {
@@ -181,9 +187,9 @@
     color: white;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.1s;
     font-size: 1.2rem;
-    transition: transform 0.2s, background-color 0.3s;
+    transition: transform 0.2s, background-color 0.1s;
     border-radius: 1rem;
   }
 
@@ -202,7 +208,7 @@
   border-radius: 25px;
   outline: none;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  transition: all 0.1s ease;
 }
 
 /* Search bar focus style */
@@ -230,7 +236,7 @@
   padding: 10px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.1s;
 }
 
 /* Dropdown item hover effect */

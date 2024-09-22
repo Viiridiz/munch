@@ -1,75 +1,63 @@
-/* src/components/Header.css */
 nav {
-  background-color: #ffffff; /* White navbar */
-  padding: 1rem;
+  background-color: #ffffff;
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  position: fixed; /* Fix navbar to the top */
-  top: 0; /* Stick it to the top of the viewport */
-  z-index: 1000; /* Ensure it stays above other content */
-  width: 100%; /* Ensure it spans the full width */
-  box-sizing: border-box; /* Prevents overflow beyond screen */
+  justify-content: space-between;
+  align-items: center; /* Vertically center items */
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  box-sizing: border-box;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.23);
-  height: 80px;
+  height: 80px; /* Fixed height */
+  padding: 0 1rem; /* Side padding */
 }
 
 .logo-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: fit-content;
+  align-items: center; /* Vertically center logo content */
 }
 
 .logo {
   width: 45px;
   height: auto;
-  margin-right: 10px; /* Space between logo and text */
+  margin-right: 10px;
+}
+
+.nav-links-container {
+  flex-grow: 1; /* Take available space to center links */
+  display: flex;
+  justify-content: center; /* Center the list in the middle column */
+}
+
+ul {
+  list-style: none;
+  display: flex;
+  align-items: center; /* Vertically center the list */
+  gap: 4rem;
+}
+
+.auth-container {
+  display: flex;
+  align-items: center; /* Vertically center the auth links */
 }
 
 nav h1 {
   color: #0b3d0b; /* Black header text */
   font-size: 2.25rem;
   font-family: 'Times New Roman', Times, serif;
-  font-weight:400;
+  font-weight: 400;
 }
 
-nav ul {
-  list-style: none;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  gap: 4rem;;
+nav ul li a, 
+nav h1 a, 
+nav span a {
+  text-decoration: none; /* Remove underline */
+  color: black; /* Set text color */
 }
 
-nav ul li a {
-  color: rgb(0, 0, 0); /* Black text in navbar links */
-  text-decoration: none;
-  font-size: 1.25rem;
-  transition: color 0.3s ease; /* Smooth transition */
-}
-
-nav ul li a:hover {
+nav ul li a:hover, 
+nav h1 a:hover,
+nav span a:hover {
   color: #0b3d0b; /* Dark forest green on hover */
-  text-decoration: none;
-}
-
-nav h2 {
-  background-color: rgb(0, 0, 0, 0);
-  padding: 12px;
-  width: 130px;
-  text-align: center;
-  border: black solid 5px;
-  color: black; 
-  border: 2px solid #0b3d0b;
-  border-radius: 1.25rem;
-  font-size: 1.25rem;
-  font-weight: normal;
-  cursor: pointer;
-  transition: background-color 0.3s ease; /* Smooth transition */
-}
-
-nav h2:hover {
-  background-color: #0b3d0b; /* Dark forest green on hover */
-  color: white;
 }

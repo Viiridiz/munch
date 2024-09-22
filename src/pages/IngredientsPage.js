@@ -97,7 +97,7 @@ const IngredientsPage = () => {
 
   return (
     <div className="ingredients-page">
-      <h1>Select <span>Ingredients</span> and <span className="go" onClick={submitIngredients}>GO!</span></h1>
+      <h1>Select <span>ingredients</span> and <span className="go" onClick={submitIngredients}>munch.</span></h1>
 
       {/* Search bar for ingredients */}
       <input

@@ -1,24 +1,49 @@
-// src/components/Header.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Header.css';
-import logo from '../assets/traydark.png'; // Assuming your logo is in the assets folder
+import { auth } from '../firebase';
+import { signOut } from 'firebase/auth';
+import logo from '../assets/traydark.png';
 
 function Header() {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setUser(user);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleSignOut = () => {
+    signOut(auth).then(() => {
+      console.log('User signed out');
+    });
+  };
+
   return (
     <header>
       <nav>
         <div className="logo-container">
           <img src={logo} alt="MUNCH logo" className="logo" />
-          <h1>munch.</h1>
+          <h1><Link to="/">munch.</Link></h1>
         </div>
-        <ul>
-          <li><Link to="/">Home</Link></li>
-          <li><Link to="/ingredients">Create</Link></li>
-          <li><Link to="/history">History</Link></li>
-          <li><Link to="/contact">Contact</Link></li>
-        </ul>
-        <h2>Get Started</h2>
+
+        <div className="nav-links-container">
+          <ul>
+            <li><Link to="/">Home</Link></li>
+            <li><Link to="/ingredients">Create</Link></li>
+            <li><Link to="/history">History</Link></li>
+          </ul>
+        </div>
+
+        <div className="auth-container">
+          {user ? (
+            <span onClick={handleSignOut}>{user.email} (Sign Out)</span>
+          ) : (
+            <span><Link to="/signin">Sign In</Link></span>
+          )}
+        </div>
       </nav>
     </header>
   );
