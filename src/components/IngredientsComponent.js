@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react';
-import './IngredientsComponent.css'; // Assuming you've moved the styles here
+import './IngredientsComponent.css';
 
-const IngredientsComponent = () => {
+const IngredientsPage = () => {
   const [selectedIngredients, setSelectedIngredients] = useState([]);
-  const [recipes, setRecipes] = useState([]); // State to hold the recipes
-  const [searchValue, setSearchValue] = useState(''); // State to hold the search input value
-  const [filteredIngredients, setFilteredIngredients] = useState([]); // State to hold the filtered ingredients
+  const [recipes, setRecipes] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [filteredIngredients, setFilteredIngredients] = useState([]);
+  const [selectedRecipe, setSelectedRecipe] = useState(null); // State to track selected recipe
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to track modal open status
   const recipeContainerRef = useRef(null);
 
   const ingredients = [
@@ -33,9 +35,9 @@ const IngredientsComponent = () => {
   ];
 
   const toggleIngredient = (ingredient) => {
-    setSelectedIngredients(prevState =>
+    setSelectedIngredients((prevState) =>
       prevState.includes(ingredient)
-        ? prevState.filter(i => i !== ingredient)
+        ? prevState.filter((i) => i !== ingredient)
         : [...prevState, ingredient]
     );
   };
@@ -48,13 +50,16 @@ const IngredientsComponent = () => {
       },
       body: JSON.stringify({ ingredients: selectedIngredients }),
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setRecipes(data.recipes);
+
         setTimeout(() => {
           if (recipeContainerRef.current) {
-            const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 0;
-            const scrollPosition = recipeContainerRef.current.offsetTop - navbarHeight - 20;
+            const navbarHeight =
+              document.querySelector('.navbar')?.offsetHeight || 0;
+            const scrollPosition =
+              recipeContainerRef.current.offsetTop - navbarHeight - 20;
             window.scrollTo({
               top: scrollPosition,
               behavior: 'smooth',
@@ -62,20 +67,21 @@ const IngredientsComponent = () => {
           }
         }, 300);
       })
-      .catch(err => console.error('Error:', err));
+      .catch((err) => console.error('Error:', err));
   };
 
   const removeSelectedIngredient = (ingredient) => {
-    setSelectedIngredients(prevState =>
-      prevState.filter(i => i !== ingredient)
+    setSelectedIngredients((prevState) =>
+      prevState.filter((i) => i !== ingredient)
     );
   };
 
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchValue(value);
+
     if (value) {
-      const filtered = ingredients.filter(ingredient =>
+      const filtered = ingredients.filter((ingredient) =>
         ingredient.toLowerCase().includes(value.toLowerCase())
       );
       setFilteredIngredients(filtered);
@@ -90,9 +96,24 @@ const IngredientsComponent = () => {
     setFilteredIngredients([]);
   };
 
+  const handleRecipeClick = (recipe) => {
+    setSelectedRecipe(recipe); // Set the selected recipe
+    setIsModalOpen(true); // Open the modal
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false); // Close the modal
+    setSelectedRecipe(null); // Clear the selected recipe
+  };
+
   return (
-    <div className="ingredients-component">
-      <h1>Select <span>ingredients</span> and <span className="go" onClick={submitIngredients}>munch.</span></h1>
+    <div className="ingredients-page">
+      <h1>
+        Select <span>ingredients</span> and{' '}
+        <span className="go" onClick={submitIngredients}>
+          munch.
+        </span>
+      </h1>
 
       {/* Search bar for ingredients */}
       <input
@@ -105,7 +126,7 @@ const IngredientsComponent = () => {
 
       {filteredIngredients.length > 0 && (
         <div className="dropdown">
-          {filteredIngredients.map(ingredient => (
+          {filteredIngredients.map((ingredient) => (
             <div
               key={ingredient}
               className="dropdown-item"
@@ -118,10 +139,12 @@ const IngredientsComponent = () => {
       )}
 
       <div className="ingredients-container">
-        {ingredients.map(ingredient => (
+        {ingredients.map((ingredient) => (
           <button
             key={ingredient}
-            className={`ingredient-button ${selectedIngredients.includes(ingredient) ? 'selected' : ''}`}
+            className={`ingredient-button ${
+              selectedIngredients.includes(ingredient) ? 'selected' : ''
+            }`}
             onClick={() => toggleIngredient(ingredient)}
           >
             {ingredient}
@@ -129,25 +152,60 @@ const IngredientsComponent = () => {
         ))}
       </div>
 
+      {/* Selected Ingredients Container */}
       <div className="selected-ingredients-container">
-        {selectedIngredients.map(ingredient => (
+        {selectedIngredients.map((ingredient) => (
           <div key={ingredient} className="ingredient-card selected-ingredient">
-            <button onClick={() => removeSelectedIngredient(ingredient)}>{ingredient}</button>
+            <button onClick={() => removeSelectedIngredient(ingredient)}>
+              {ingredient}
+            </button>
           </div>
         ))}
       </div>
 
+      {/* Display the recipes as cards */}
       <div ref={recipeContainerRef} className="recipes-container">
         {recipes.map((recipe, index) => (
-          <div key={index} className="recipe-card">
+          <div
+            key={index}
+            className="recipe-card"
+            onClick={() => handleRecipeClick(recipe)} // Handle click to open modal
+          >
             <h3>{recipe.title}</h3>
             <p>Cooking Time: {recipe.cooking_time}</p>
             <p>Servings: {recipe.servings}</p>
           </div>
         ))}
       </div>
+
+      {/* Modal for showing detailed recipe information */}
+      {isModalOpen && selectedRecipe && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close-button" onClick={closeModal}>
+              &times;
+            </span>
+            <h2>{selectedRecipe.title}</h2>
+            
+            <h3>Ingredients</h3>
+            {selectedRecipe.ingredients.map((ingredient, index) => (
+              <p key={index}>
+                {ingredient.quantity} {ingredient.unit} {ingredient.name}
+              </p>
+            ))}
+            
+            <h3>Instructions</h3>
+            {selectedRecipe.instructions.map((instruction, index) => (
+              <p key={index}>{instruction}</p>
+            ))}
+            
+              <p class="cook-time">Cooking Time: {selectedRecipe.cooking_time}</p>
+              <p>Servings: {selectedRecipe.servings}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default IngredientsComponent;
+export default IngredientsPage;

@@ -3,39 +3,21 @@ import './IngredientsPage.css';
 
 const IngredientsPage = () => {
   const [selectedIngredients, setSelectedIngredients] = useState([]);
-  const [recipes, setRecipes] = useState([]); // State to hold the recipes
-  const [searchValue, setSearchValue] = useState(''); // State to hold the search input value
-  const [filteredIngredients, setFilteredIngredients] = useState([]); // State to hold the filtered ingredients
+  const [recipes, setRecipes] = useState([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [filteredIngredients, setFilteredIngredients] = useState([]);
+  const [selectedRecipe, setSelectedRecipe] = useState(null); // State to track selected recipe
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to track modal open status
   const recipeContainerRef = useRef(null);
 
   const ingredients = [
-    'Tomato', 'Cheese', 'Chicken', 'Fish', 'Potatoes', 'Noodles', 'Beef', 'Pork', 'Carrots',
-    'Broccoli', 'Onion', 'Garlic', 'Lettuce', 'Cucumber', 'Spinach', 'Peas', 'Mushrooms',
-    'Bell Pepper', 'Zucchini', 'Eggplant', 'Corn', 'Cauliflower', 'Asparagus', 'Sweet Potatoes',
-    'Green Beans', 'Cabbage', 'Celery', 'Avocado', 'Radishes', 'Beets', 'Lemon', 'Lime', 'Oranges',
-    'Apples', 'Bananas', 'Strawberries', 'Blueberries', 'Raspberries', 'Grapes', 'Cherries',
-    'Peaches', 'Plums', 'Pineapple', 'Mango', 'Papaya', 'Kiwi', 'Watermelon', 'Melon', 'Pumpkin',
-    'Squash', 'Yam', 'Quinoa', 'Rice', 'Barley', 'Oats', 'Millet', 'Flour', 'Bread', 'Pasta',
-    'Tortillas', 'Bagels', 'Bacon', 'Sausage', 'Ham', 'Tofu', 'Tempeh', 'Lentils', 'Chickpeas',
-    'Black Beans', 'Kidney Beans', 'Lima Beans', 'Peanuts', 'Almonds', 'Cashews', 'Walnuts',
-    'Pecans', 'Sunflower Seeds', 'Chia Seeds', 'Flax Seeds', 'Pumpkin Seeds', 'Sesame Seeds',
-    'Basil', 'Oregano', 'Thyme', 'Rosemary', 'Cilantro', 'Parsley', 'Dill', 'Mint', 'Bay Leaves',
-    'Cinnamon', 'Nutmeg', 'Ginger', 'Turmeric', 'Curry Powder', 'Paprika', 'Cumin', 'Coriander',
-    'Chili Powder', 'Soy Sauce', 'Vinegar', 'Olive Oil', 'Coconut Oil', 'Butter', 'Cream', 'Milk',
-    'Yogurt', 'Eggs', 'Sour Cream', 'Mozzarella', 'Parmesan', 'Feta', 'Gouda', 'Brie', 'Swiss Cheese',
-    'Cream Cheese', 'Honey', 'Maple Syrup', 'Sugar', 'Brown Sugar', 'Chocolate', 'Vanilla',
-    'Peanut Butter', 'Jelly', 'Jam', 'Mayonnaise', 'Ketchup', 'Mustard', 'Hot Sauce', 'Barbecue Sauce',
-    'Ranch Dressing', 'Italian Dressing', 'Sriracha', 'Salsa', 'Hummus', 'Guacamole', 'Tzatziki',
-    'Pickles', 'Olives', 'Capers', 'Artichokes', 'Sun-dried Tomatoes', 'Coconut', 'Almond Milk',
-    'Coconut Milk', 'Soy Milk', 'Shrimp', 'Salmon', 'Tuna', 'Crab', 'Lobster', 'Clams', 'Oysters',
-    'Scallops', 'Squid', 'Octopus', 'Duck', 'Turkey', 'Veal', 'Lamb', 'Venison', 'Bison', 'Goat',
-    'Quail', 'Rabbit', 'Frog Legs', 'Escargot', 'Caviar'
+    // List of ingredients here
   ];
 
   const toggleIngredient = (ingredient) => {
-    setSelectedIngredients(prevState =>
+    setSelectedIngredients((prevState) =>
       prevState.includes(ingredient)
-        ? prevState.filter(i => i !== ingredient)
+        ? prevState.filter((i) => i !== ingredient)
         : [...prevState, ingredient]
     );
   };
@@ -48,29 +30,29 @@ const IngredientsPage = () => {
       },
       body: JSON.stringify({ ingredients: selectedIngredients }),
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setRecipes(data.recipes);
-  
-        // Wait a little before scrolling
+
         setTimeout(() => {
           if (recipeContainerRef.current) {
-            const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 0; // Get the height of the navbar
-            const scrollPosition = recipeContainerRef.current.offsetTop - navbarHeight - 20; // Add 20px margin
+            const navbarHeight =
+              document.querySelector('.navbar')?.offsetHeight || 0;
+            const scrollPosition =
+              recipeContainerRef.current.offsetTop - navbarHeight - 20;
             window.scrollTo({
               top: scrollPosition,
               behavior: 'smooth',
             });
           }
-        }, 300); // Add a 300ms delay before scrolling (you can adjust the time if needed)
+        }, 300);
       })
-      .catch(err => console.error('Error:', err));
+      .catch((err) => console.error('Error:', err));
   };
-  
 
   const removeSelectedIngredient = (ingredient) => {
-    setSelectedIngredients(prevState =>
-      prevState.filter(i => i !== ingredient)
+    setSelectedIngredients((prevState) =>
+      prevState.filter((i) => i !== ingredient)
     );
   };
 
@@ -78,9 +60,8 @@ const IngredientsPage = () => {
     const value = event.target.value;
     setSearchValue(value);
 
-    // Filter ingredients based on the search value
     if (value) {
-      const filtered = ingredients.filter(ingredient =>
+      const filtered = ingredients.filter((ingredient) =>
         ingredient.toLowerCase().includes(value.toLowerCase())
       );
       setFilteredIngredients(filtered);
@@ -90,14 +71,29 @@ const IngredientsPage = () => {
   };
 
   const handleIngredientClick = (ingredient) => {
-    toggleIngredient(ingredient);  // Add ingredient to selected list
-    setSearchValue('');  // Clear search bar
-    setFilteredIngredients([]);  // Clear filtered list
+    toggleIngredient(ingredient);
+    setSearchValue('');
+    setFilteredIngredients([]);
+  };
+
+  const handleRecipeClick = (recipe) => {
+    setSelectedRecipe(recipe); // Set the selected recipe
+    setIsModalOpen(true); // Open the modal
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false); // Close the modal
+    setSelectedRecipe(null); // Clear the selected recipe
   };
 
   return (
     <div className="ingredients-page">
-      <h1>Select <span>ingredients</span> and <span className="go" onClick={submitIngredients}>munch.</span></h1>
+      <h1>
+        Select <span>ingredients</span> and{' '}
+        <span className="go" onClick={submitIngredients}>
+          munch.
+        </span>
+      </h1>
 
       {/* Search bar for ingredients */}
       <input
@@ -108,10 +104,9 @@ const IngredientsPage = () => {
         placeholder="...or search them if you are lazy"
       />
 
-      {/* Show filtered ingredients as a dropdown */}
       {filteredIngredients.length > 0 && (
         <div className="dropdown">
-          {filteredIngredients.map(ingredient => (
+          {filteredIngredients.map((ingredient) => (
             <div
               key={ingredient}
               className="dropdown-item"
@@ -124,10 +119,12 @@ const IngredientsPage = () => {
       )}
 
       <div className="ingredients-container">
-        {ingredients.map(ingredient => (
+        {ingredients.map((ingredient) => (
           <button
             key={ingredient}
-            className={`ingredient-button ${selectedIngredients.includes(ingredient) ? 'selected' : ''}`}
+            className={`ingredient-button ${
+              selectedIngredients.includes(ingredient) ? 'selected' : ''
+            }`}
             onClick={() => toggleIngredient(ingredient)}
           >
             {ingredient}
@@ -137,9 +134,11 @@ const IngredientsPage = () => {
 
       {/* Selected Ingredients Container */}
       <div className="selected-ingredients-container">
-        {selectedIngredients.map(ingredient => (
+        {selectedIngredients.map((ingredient) => (
           <div key={ingredient} className="ingredient-card selected-ingredient">
-            <button onClick={() => removeSelectedIngredient(ingredient)}>{ingredient}</button>
+            <button onClick={() => removeSelectedIngredient(ingredient)}>
+              {ingredient}
+            </button>
           </div>
         ))}
       </div>
@@ -147,13 +146,45 @@ const IngredientsPage = () => {
       {/* Display the recipes as cards */}
       <div ref={recipeContainerRef} className="recipes-container">
         {recipes.map((recipe, index) => (
-          <div key={index} className="recipe-card">
-            <h3>{recipe.title}</h3> {/* Display recipe name */}
-            <p>Cooking Time: {recipe.cooking_time}</p> {/* Display cooking time */}
-            <p>Servings: {recipe.servings}</p> {/* Display number of servings */}
+          <div
+            key={index}
+            className="recipe-card"
+            onClick={() => handleRecipeClick(recipe)} // Handle click to open modal
+          >
+            <h3>{recipe.title}</h3>
+            <p>Cooking Time: {recipe.cooking_time}</p>
+            <p>Servings: {recipe.servings}</p>
           </div>
         ))}
       </div>
+
+      {/* Modal for showing detailed recipe information */}
+      {isModalOpen && selectedRecipe && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close-button" onClick={closeModal}>
+              &times;
+            </span>
+            <h2>{selectedRecipe.title}</h2>
+            <h3>Ingredients</h3>
+            <ul>
+              {selectedRecipe.ingredients.map((ingredient, index) => (
+                <li key={index}>
+                  {ingredient.quantity} {ingredient.unit} {ingredient.name}
+                </li>
+              ))}
+            </ul>
+            <h3>Instructions</h3>
+            <ol>
+              {selectedRecipe.instructions.map((instruction, index) => (
+                <li key={index}>{instruction}</li>
+              ))}
+            </ol>
+            <p>Cooking Time: {selectedRecipe.cooking_time}</p>
+            <p>Servings: {selectedRecipe.servings}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

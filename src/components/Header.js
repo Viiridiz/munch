@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';  // Add useNavigate
+import { Link, useNavigate } from 'react-router-dom';
 import './Header.css';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
 import logo from '../assets/traydark.png';
+import LogoutModal from './LogoutModal'; // Import the modal
 
-function Header({ ingredientsRef }) {  // Accept ingredientsRef as a prop
+function Header({ ingredientsRef }) {
   const [user, setUser] = useState(null);
-  const navigate = useNavigate();  // Initialize navigate
+  const [showModal, setShowModal] = useState(false); // Modal state
+  const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -19,15 +21,16 @@ function Header({ ingredientsRef }) {  // Accept ingredientsRef as a prop
   const handleSignOut = () => {
     signOut(auth).then(() => {
       console.log('User signed out');
+      setShowModal(false); // Close modal after logout
     });
   };
 
   const handleScrollToIngredients = (e) => {
-    e.preventDefault();  // Prevent default link behavior
+    e.preventDefault();
     if (ingredientsRef.current) {
-      ingredientsRef.current.scrollIntoView({ behavior: 'smooth' });  // Scroll smoothly to ingredients section
+      ingredientsRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-    navigate('/');  // Optional: navigate to the home route
+    navigate('/');
   };
 
   const handleScrollToTop = (e) => {
@@ -35,18 +38,21 @@ function Header({ ingredientsRef }) {  // Accept ingredientsRef as a prop
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleLogoutClick = () => {
+    setShowModal(true); // Show the modal
+  };
+
   return (
     <header>
       <nav>
         <div className="logo-container">
-          <img src={logo} alt="MUNCH logo" className="logo" />
-          <h1><Link to="/">munch.</Link></h1>
+          <img src={logo} alt="MUNCH logo" className="logo" onClick={handleScrollToTop} />
+          <h1><Link to="/" onClick={handleScrollToTop}>munch.</Link></h1>
         </div>
 
         <div className="nav-links-container">
           <ul>
-            <li><a href="/" onClick={handleScrollToTop}>Home</a></li>
-            {/* Change Create link to trigger the scroll */}
+            <li><Link to="/"><a href="/" onClick={handleScrollToTop}>Home</a></Link></li>
             <li><a href="/" onClick={handleScrollToIngredients}>Create</a></li>
             <li><Link to="/history">History</Link></li>
           </ul>
@@ -54,12 +60,20 @@ function Header({ ingredientsRef }) {  // Accept ingredientsRef as a prop
 
         <div className="auth-container">
           {user ? (
-            <span onClick={handleSignOut}>{user.email} (Sign Out)</span>
+            <span onClick={handleLogoutClick}>{user.email} (Sign Out)</span>  // Trigger modal
           ) : (
             <span><Link to="/signin">Sign In</Link></span>
           )}
         </div>
       </nav>
+
+      {/* Show the modal if showModal is true */}
+      {showModal && (
+        <LogoutModal
+          onClose={() => setShowModal(false)} // Close modal if "No" is clicked
+          onConfirm={handleSignOut} // Confirm logout if "Yes" is clicked
+        />
+      )}
     </header>
   );
 }

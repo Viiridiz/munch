@@ -13,7 +13,7 @@
   }
   
   /* Modal content box */
-  .modal-content {
+  .modal-contentlogin {
     background-color: white;
     padding: 2rem;
     border-radius: 8px;
@@ -37,6 +37,7 @@
     padding: 0.8rem 1.5rem;
     cursor: pointer;
     border-radius: 4px;
+    width: 45%;
   }
   
   .confirm-button:hover {
@@ -50,6 +51,7 @@
     padding: 0.8rem 1.5rem;
     cursor: pointer;
     border-radius: 4px;
+    width: 45%;
   }
   
   .cancel-button:hover {
