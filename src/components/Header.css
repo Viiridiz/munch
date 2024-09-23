@@ -40,6 +40,7 @@ ul {
 .auth-container {
   display: flex;
   align-items: center; /* Vertically center the auth links */
+  cursor: pointer;
 }
 
 nav h1 {
@@ -54,10 +55,12 @@ nav h1 a,
 nav span a {
   text-decoration: none; /* Remove underline */
   color: black; /* Set text color */
+  cursor: pointer;
 }
 
 nav ul li a:hover, 
 nav h1 a:hover,
 nav span a:hover {
   color: #0b3d0b; /* Dark forest green on hover */
+  cursor: pointer;
 }

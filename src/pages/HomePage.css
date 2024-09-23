@@ -1,40 +1,41 @@
-/* src/components/Homepage.css */
-
 .homepage {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Full-screen height */
+  min-height: 100vh; /* Ensure the page takes at least full screen */
 }
 
 .top-panel {
-  padding-top: 100px;
+  position: relative;  /* Keep the content inside in position */
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;  /* Maintain full-screen height but allow for more content */
   background-repeat: no-repeat;
-  background-image: url('../assets/homeimg.png'); /* Add your image here */
+  background-image: url('../assets/homeimg.png');
+  background-size: cover;  /* Ensure the image covers the entire panel without stretching */
   background-position: center;
   padding: 2rem;
-  color: white; /* Ensure text stands out on the image */
+  color: white;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1; /* Keeps the content visible on top */
 }
 
 .caption-box {
   display: flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
   flex-direction: column;
   max-width: 500px;
   text-align: center;
+  z-index: 2; /* Ensure caption stays above the background image */
 }
 
 .caption-box h1 {
   font-size: 5rem;
-  font-weight: bold;
   font-weight: normal;
   font-family: 'Times New Roman', Times, serif;
-  color: black; /* Black text for better legibility */
+  color: black;
   margin-bottom: 1rem;
 }
 
@@ -44,7 +45,7 @@
 
 .caption-box p {
   font-size: 1.4rem;
-  color: black; /* Black text for better legibility */
+  color: black;
   margin-bottom: 2rem;
 }
 
@@ -52,86 +53,41 @@
   display: inline-block;
   background-color: #297229;
   color: white;
-  padding: .6rem;
-  border-radius: 1rem;
+  padding: 1rem;
+  border-radius: .5rem;
   text-decoration: none;
   font-size: 1.2rem;
   cursor: pointer;
 }
 
-
 .right-panel {
   background-color: rgb(255, 255, 255);
   display: flex;
-  background-image: url('../assets/rightimg.jpg'); /* Add your background image here */
-  background-size: cover; /* Ensure the image covers the entire panel */
-  background-position: center; /* Center the image */
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  text-align: center; /* Ensures all text is centered */
-}
-
-.reviews-container {
   text-align: center;
-}
-
-.review {
-  margin-bottom: 2rem;
-}
-
-.star-rating {
-  display: flex;
-  justify-content: center;
-}
-
-.star {
-  width: 2.5rem;
-  height: 2.5rem;
-  margin: 0 0.5rem;
-  fill: #0b3d0b; /* Dark forest green */
-  transition: fill 0.3s ease;
-}
-
-.organization-name {
-  font-size: 1.5rem;
-  color: #333;
+  padding: 2rem;
 }
 
 .store-buttons {
   display: flex;
-  justify-content: center; /* Center buttons horizontally */
+  justify-content: center;
   align-items: center;
   gap: 1.5rem;
   margin-bottom: 1rem;
 }
 
 .store-buttons img {
-  width: 150px;  /* Fixed width for both buttons */
-  height: 50px;  /* Fixed height for both buttons */
+  width: 150px;
+  height: 50px;
   object-fit: contain; /* Ensure the image fits within the box without distortion */
 }
 
-.store-buttons img[alt="Google Play"] {
-  width: 150px;
-  height: 57px;
+/* Ensures the background image doesn't scale or resize */
+body {
+  overflow-x: hidden; /* Prevents horizontal scrolling caused by background scaling */
 }
-
-.start-button {
-  background-color: #0d570d;
-  color: white;
-  padding: 1rem 2rem;
-  border: none;
-  cursor: pointer;
-  font-size: 1.5rem;
-  border-radius: 8px;
-  margin-top: 1.5rem;
-}
-
-.start-button:hover {
-  background-color: #085d08;
-}
-
 
 /* Responsive design for mobile */
 @media (max-width: 768px) {
@@ -139,27 +95,21 @@
     flex-direction: column;
   }
 
-  .left-panel, .right-panel {
-    width: 100%;
-    height: 45vh; /* Adjust height for stacked layout */
-  }
-
   .caption-box {
     max-width: 80%;
-    padding: 1rem; /* Reduce padding on mobile */
-    top: 75%; /* Adjust top positioning for mobile */
+    padding: 1rem;
   }
 
   .caption-box h1 {
-    font-size: 1.5rem; /* Reduce title size */
+    font-size: 2rem; /* Adjust title size for mobile */
   }
 
   .caption-box p {
-    font-size: 0.9rem; /* Reduce paragraph text size */
+    font-size: 1rem;
   }
 
   .start-button {
-    font-size: 1rem; /* Reduce button text size for mobile */
-    padding: 0.8rem 1.5rem; /* Reduce button padding for mobile */
+    font-size: 1rem;
+    padding: 0.8rem 1.5rem;
   }
 }

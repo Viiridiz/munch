@@ -15,6 +15,7 @@ function SignInPage() {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log('Signed up as:', userCredential.user);
+        navigate('/');
         setError(null);
       })
       .catch((error) => {

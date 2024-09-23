@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';  // Add useNavigate
 import './Header.css';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
 import logo from '../assets/traydark.png';
 
-function Header() {
+function Header({ ingredientsRef }) {  // Accept ingredientsRef as a prop
   const [user, setUser] = useState(null);
+  const navigate = useNavigate();  // Initialize navigate
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -21,6 +22,19 @@ function Header() {
     });
   };
 
+  const handleScrollToIngredients = (e) => {
+    e.preventDefault();  // Prevent default link behavior
+    if (ingredientsRef.current) {
+      ingredientsRef.current.scrollIntoView({ behavior: 'smooth' });  // Scroll smoothly to ingredients section
+    }
+    navigate('/');  // Optional: navigate to the home route
+  };
+
+  const handleScrollToTop = (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <header>
       <nav>
@@ -31,8 +45,9 @@ function Header() {
 
         <div className="nav-links-container">
           <ul>
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/ingredients">Create</Link></li>
+            <li><a href="/" onClick={handleScrollToTop}>Home</a></li>
+            {/* Change Create link to trigger the scroll */}
+            <li><a href="/" onClick={handleScrollToIngredients}>Create</a></li>
             <li><Link to="/history">History</Link></li>
           </ul>
         </div>
