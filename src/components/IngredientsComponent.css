@@ -61,36 +61,27 @@
     display: none; /* For Chrome, Safari, and Opera */
   }
   
-  .recipes-container {
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem; /* Add some spacing between recipe cards */
-    
-    /* Set a minimum height to avoid shrinking */
-    min-height: 200px;
-  
-    /* Ensure it doesn't shrink either */
-    flex-shrink: 0;
-    padding-top: 20px;
-    padding-bottom: 70px;
-  }
+  .recipes-container,
+  .favorites-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-start; /* Align items at the start for overflow */
+      gap: 1rem; /* Add spacing between cards */
+      
+      /* Ensure the containers take up the full viewport height */
+      min-height:550px; /* Subtract the padding or navbar height if needed */
+      width: 100%;
 
-  .favorites-container{
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem; /* Add some spacing between recipe cards */
-    
-    /* Set a minimum height to avoid shrinking */
-    min-height: 200px;
-  
-    /* Ensure it doesn't shrink either */
-    flex-shrink: 0;
-    padding-top: 20px;
-    padding-bottom: 70px;
+      background-repeat: no-repeat;
+      background-image: url('../assets/rightimg.jpg');
+      background-size: cover;  /* Ensure the image covers the entire panel without stretching */
+      background-position: center;
+      
+      /* Make the content scrollable if it overflows */
+      overflow-y: auto;
+      padding-top: 20px;
+      padding-bottom: 70px;
   }
   
   .recipe-card {
@@ -99,7 +90,7 @@
     background-color: #fff;
     border: 1px solid #166d16;
     border-radius: 8px;
-    padding: 60px;
+    padding: 50px;
     margin: 10px;
     width: 350px;
     height: 175px;

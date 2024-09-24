@@ -86,7 +86,7 @@ const IngredientsPage = () => {
             const navbarHeight =
               document.querySelector('.navbar')?.offsetHeight || 0;
             const scrollPosition =
-              recipeContainerRef.current.offsetTop - navbarHeight - 20;
+              recipeContainerRef.current.offsetTop - navbarHeight - 120;
             window.scrollTo({
               top: scrollPosition,
               behavior: 'smooth',
@@ -240,8 +240,8 @@ const IngredientsPage = () => {
       ))}
     </div>
 
-      <h1>The <span>recipes.</span></h1>
-      <div ref={recipeContainerRef} className="recipes-container">
+      <h1 ref={recipeContainerRef}>The <span>recipes.</span></h1>
+      <div className="recipes-container">
         {recipes.map((recipe, index) => (
           <div key={index} className="recipe-card">
             <h3>{recipe.title}</h3>

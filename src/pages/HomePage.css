@@ -6,14 +6,14 @@
 }
 
 .top-panel {
-  position: relative;  /* Keep the content inside in position */
+   /* Keep the content inside in position */
   width: 100%;
   min-height: 100vh;  /* Maintain full-screen height but allow for more content */
   background-repeat: no-repeat;
   background-image: url('../assets/homeimg.png');
   background-size: cover;  /* Ensure the image covers the entire panel without stretching */
   background-position: center;
-  padding: 2rem;
+  padding:15px;
   color: white;
   display: flex;
   justify-content: center;
