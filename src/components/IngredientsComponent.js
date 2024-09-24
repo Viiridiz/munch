@@ -1,4 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { db, auth } from '../firebase';
+import { doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore"; // Firestore imports
+import { onAuthStateChanged } from 'firebase/auth'; // Firebase Auth for logged-in user
 import './IngredientsComponent.css';
 
 const IngredientsPage = () => {
@@ -6,8 +9,10 @@ const IngredientsPage = () => {
   const [recipes, setRecipes] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [filteredIngredients, setFilteredIngredients] = useState([]);
-  const [selectedRecipe, setSelectedRecipe] = useState(null); // State to track selected recipe
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to track modal open status
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [favoritedRecipes, setFavoritedRecipes] = useState([]); // To store favorited recipes
+  const [user, setUser] = useState(null); // Track logged-in user
   const recipeContainerRef = useRef(null);
 
   const ingredients = [
@@ -34,6 +39,27 @@ const IngredientsPage = () => {
     'Quail', 'Rabbit', 'Frog Legs', 'Escargot', 'Caviar'
   ];
 
+  // Listen for the authenticated user
+  useEffect(() => {
+    onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        loadFavoritedRecipes(currentUser); // Load favorited recipes on user login
+      } else {
+        setUser(null);
+      }
+    });
+  }, []);
+
+  // Load favorited recipes from Firestore
+  const loadFavoritedRecipes = async (currentUser) => {
+    const userDoc = await getDoc(doc(db, "users", currentUser.uid));
+    if (userDoc.exists()) {
+      setFavoritedRecipes(userDoc.data().favorites || []);
+    }
+  };
+
+  // Toggle ingredient selection
   const toggleIngredient = (ingredient) => {
     setSelectedIngredients((prevState) =>
       prevState.includes(ingredient)
@@ -42,6 +68,7 @@ const IngredientsPage = () => {
     );
   };
 
+  // Submit selected ingredients and fetch recipes
   const submitIngredients = () => {
     fetch('http://localhost:5000/generate-recipe', {
       method: 'POST',
@@ -96,84 +123,140 @@ const IngredientsPage = () => {
     setFilteredIngredients([]);
   };
 
+  // Handle favoriting a recipe
+  const toggleFavoriteRecipe = async (recipe) => {
+    if (!user) {
+      alert("Please sign in to favorite recipes.");
+      return;
+    }
+
+    const userDocRef = doc(db, "users", user.uid);
+
+    // Check if the recipe is already favorited
+    const isFavorited = favoritedRecipes.some((r) => r.title === recipe.title);
+
+    if (isFavorited) {
+      // Unfavorite the recipe
+      await updateDoc(userDocRef, {
+        favorites: arrayRemove(recipe)
+      });
+      setFavoritedRecipes(favoritedRecipes.filter((r) => r.title !== recipe.title));
+    } else {
+      // Favorite the recipe
+      await updateDoc(userDocRef, {
+        favorites: arrayUnion(recipe)
+      });
+      setFavoritedRecipes([...favoritedRecipes, recipe]);
+    }
+  };
+
+  // Handle recipe click to open the modal
   const handleRecipeClick = (recipe) => {
-    setSelectedRecipe(recipe); // Set the selected recipe
-    setIsModalOpen(true); // Open the modal
+    setSelectedRecipe(recipe);
+    setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    setIsModalOpen(false); // Close the modal
-    setSelectedRecipe(null); // Clear the selected recipe
+    setIsModalOpen(false);
+    setSelectedRecipe(null);
   };
 
   return (
     <div className="ingredients-page">
-      <h1>
-        Select <span>ingredients</span> and{' '}
-        <span className="go" onClick={submitIngredients}>
-          munch.
-        </span>
-      </h1>
 
-      {/* Search bar for ingredients */}
-      <input
-        type="text"
-        className="ingredient-search"
-        value={searchValue}
-        onChange={handleSearchChange}
-        placeholder="...or search them if you are lazy"
-      />
+      <h1>Your <span>favourites.</span></h1>
+      <div className="favorites-container">
+        {favoritedRecipes.map((recipe, index) => (
+          <div key={index} className="recipe-card">
+            <h3>{recipe.title}</h3>
+            <p>Cooking Time: {recipe.cooking_time}</p>
+            <p>Servings: {recipe.servings}</p>
 
-      {filteredIngredients.length > 0 && (
-        <div className="dropdown">
-          {filteredIngredients.map((ingredient) => (
-            <div
-              key={ingredient}
-              className="dropdown-item"
-              onClick={() => handleIngredientClick(ingredient)}
-            >
-              {ingredient}
+            <div className="button-container">
+            <button onClick={() => handleRecipeClick(recipe)}>View Recipe</button>
+              {/* Favorite button */}
+              <button onClick={() => toggleFavoriteRecipe(recipe)}>
+                {favoritedRecipes.some((r) => r.title === recipe.title)
+                  ? 'Unfavorite'
+                  : 'Favorite'}
+              </button>
             </div>
-          ))}
-        </div>
-      )}
-
-      <div className="ingredients-container">
-        {ingredients.map((ingredient) => (
-          <button
-            key={ingredient}
-            className={`ingredient-button ${
-              selectedIngredients.includes(ingredient) ? 'selected' : ''
-            }`}
-            onClick={() => toggleIngredient(ingredient)}
-          >
-            {ingredient}
-          </button>
-        ))}
-      </div>
-
-      {/* Selected Ingredients Container */}
-      <div className="selected-ingredients-container">
-        {selectedIngredients.map((ingredient) => (
-          <div key={ingredient} className="ingredient-card selected-ingredient">
-            <button onClick={() => removeSelectedIngredient(ingredient)}>
-              {ingredient}
-            </button>
           </div>
         ))}
       </div>
 
-      {/* Display the recipes as cards */}
+    <h1>
+      Select <span>ingredients</span> and{' '}
+      <span className="go" onClick={submitIngredients}>
+        munch.
+      </span>
+    </h1>
+
+    {/* Search bar for ingredients */}
+    <input
+      type="text"
+      className="ingredient-search"
+      value={searchValue}
+      onChange={handleSearchChange}
+      placeholder="...or search them if you are lazy"
+    />
+
+    {filteredIngredients.length > 0 && (
+      <div className="dropdown">
+        {filteredIngredients.map((ingredient) => (
+          <div
+            key={ingredient}
+            className="dropdown-item"
+            onClick={() => handleIngredientClick(ingredient)}
+          >
+            {ingredient}
+          </div>
+        ))}
+      </div>
+    )}
+
+    <div className="ingredients-container">
+      {ingredients.map((ingredient) => (
+        <button
+          key={ingredient}
+          className={`ingredient-button ${
+            selectedIngredients.includes(ingredient) ? 'selected' : ''
+          }`}
+          onClick={() => toggleIngredient(ingredient)}
+        >
+          {ingredient}
+        </button>
+      ))}
+    </div>
+
+    {/* Selected Ingredients Container */}
+    <div className="selected-ingredients-container">
+      {selectedIngredients.map((ingredient) => (
+        <div key={ingredient} className="ingredient-card selected-ingredient">
+          <button onClick={() => removeSelectedIngredient(ingredient)}>
+            {ingredient}
+          </button>
+        </div>
+      ))}
+    </div>
+
+      <h1>The <span>recipes.</span></h1>
       <div ref={recipeContainerRef} className="recipes-container">
         {recipes.map((recipe, index) => (
-          <div
-            key={index}
-            className="recipe-card"
-            onClick={() => handleRecipeClick(recipe)} // Handle click to open modal
-          >
+          <div key={index} className="recipe-card">
             <h3>{recipe.title}</h3>
             <p>Cooking Time: {recipe.cooking_time}</p>
             <p>Servings: {recipe.servings}</p>
+
+            <div className="button-container">
+            <button onClick={() => handleRecipeClick(recipe)}>View Recipe</button>
+              {/* Favorite button */}
+              <button onClick={() => toggleFavoriteRecipe(recipe)}>
+                {favoritedRecipes.some((r) => r.title === recipe.title)
+                  ? 'Unfavorite'
+                  : 'Favorite'}
+              </button>
+            </div>
           </div>
         ))}
       </div>
@@ -186,21 +269,22 @@ const IngredientsPage = () => {
               &times;
             </span>
             <h2>{selectedRecipe.title}</h2>
-            
             <h3>Ingredients</h3>
-            {selectedRecipe.ingredients.map((ingredient, index) => (
-              <p key={index}>
-                {ingredient.quantity} {ingredient.unit} {ingredient.name}
-              </p>
-            ))}
-            
+            <ul>
+              {selectedRecipe.ingredients.map((ingredient, index) => (
+                <li key={index}>
+                  {ingredient.quantity} {ingredient.unit} {ingredient.name}
+                </li>
+              ))}
+            </ul>
             <h3>Instructions</h3>
-            {selectedRecipe.instructions.map((instruction, index) => (
-              <p key={index}>{instruction}</p>
-            ))}
-            
-              <p class="cook-time">Cooking Time: {selectedRecipe.cooking_time}</p>
-              <p>Servings: {selectedRecipe.servings}</p>
+            <ol>
+              {selectedRecipe.instructions.map((instruction, index) => (
+                <li key={index}>{instruction}</li>
+              ))}
+            </ol>
+            <p>Cooking Time: {selectedRecipe.cooking_time}</p>
+            <p>Servings: {selectedRecipe.servings}</p>
           </div>
         </div>
       )}

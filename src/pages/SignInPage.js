@@ -5,23 +5,34 @@ import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import './SignInPage.css';
 
+import { db } from '../firebase.js'; // Import Firestore (db)
+import { doc, setDoc } from 'firebase/firestore'; // Import Firestore methods
+
+
 function SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate(); // Initialize navigate
 
-  const handleSignUp = () => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log('Signed up as:', userCredential.user);
-        navigate('/');
-        setError(null);
-      })
-      .catch((error) => {
-        setError(error.message);
+  const handleSignUp = async () => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userId = userCredential.user.uid;
+  
+      // Create user document in Firestore with empty favorites
+      await setDoc(doc(db, 'users', userId), {
+        favorites: [] // Initialize with an empty favorites array
       });
+  
+      console.log('Signed up as:', userCredential.user);
+      setError(null);
+      navigate('/'); // Redirect to homepage
+    } catch (error) {
+      setError(error.message); // Handle any errors during sign-up
+    }
   };
+  
 
   const handleSignIn = () => {
     signInWithEmailAndPassword(auth, email, password)

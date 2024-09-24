@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
 import Header from '../components/Header';
 import IngredientsComponent from '../components/IngredientsComponent';
 import './HomePage.css';
@@ -26,7 +25,7 @@ function HomePage() {
             <a href="/" onClick={handleScrollToIngredients}>Get Started Now</a>
           </div>
         </div>
-
+        
         {/* Ingredients section */}
         <div ref={ingredientsRef}>
           <IngredientsComponent />

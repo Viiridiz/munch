@@ -73,7 +73,23 @@
   
     /* Ensure it doesn't shrink either */
     flex-shrink: 0;
-    padding-top: 100px;
+    padding-top: 20px;
+    padding-bottom: 70px;
+  }
+
+  .favorites-container{
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem; /* Add some spacing between recipe cards */
+    
+    /* Set a minimum height to avoid shrinking */
+    min-height: 200px;
+  
+    /* Ensure it doesn't shrink either */
+    flex-shrink: 0;
+    padding-top: 20px;
     padding-bottom: 70px;
   }
   
@@ -83,15 +99,27 @@
     background-color: #fff;
     border: 1px solid #166d16;
     border-radius: 8px;
-    padding: 10px;
-    padding-bottom: 35px;
+    padding: 60px;
     margin: 10px;
     width: 350px;
-    height: 150px;
+    height: 175px;
     text-align: center;
     align-items: center;
     justify-content: center;
     transition: ease-in-out 0.1s;
+  }
+
+  .recipe-card button{
+    border-radius: 1rem;
+    color: white;
+    padding: 1rem;
+    margin: 0.5rem;
+    background-color: #335f33;
+    border: 2px solid;
+    cursor: pointer;
+    font-size: .9rem;
+    transition: transform 0.2s, background-color 0.1s;
+    font-size: 17px;
   }
 
   .recipe-card:hover {
@@ -306,4 +334,15 @@
 
   .cook-time{
     padding-top: 30px;
+  }
+
+  .button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .button-container button{
+
+    width: 45%;
   }
