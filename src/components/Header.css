@@ -16,6 +16,7 @@ nav {
 .logo-container {
   display: flex;
   align-items: center; /* Vertically center logo content */
+  width: 100px;
 }
 
 .logo {
@@ -25,22 +26,26 @@ nav {
 }
 
 .nav-links-container {
-  flex-grow: 1; /* Take available space to center links */
   display: flex;
-  justify-content: center; /* Center the list in the middle column */
+  width: fit-content;
+  justify-content: center; /* Center the links horizontally */
 }
 
 ul {
   list-style: none;
   display: flex;
   align-items: center; /* Vertically center the list */
-  gap: 4rem;
+  gap: 4rem; /* Add space between links */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+  font-size: 20px;
 }
 
 .auth-container {
   display: flex;
   align-items: center; /* Vertically center the auth links */
   cursor: pointer;
+  width: 100px;
 }
 
 nav h1 {

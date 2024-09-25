@@ -87,7 +87,7 @@
 
 /* Ensures the background image doesn't scale or resize */
 body {
-  overflow-x: hidden; /* Prevents horizontal scrolling caused by background scaling */
+  overflow-x: hidden;/* Prevents horizontal scrolling caused by background scaling */
 }
 
 /* Responsive design for mobile */

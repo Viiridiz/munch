@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom'; // You don't need useNavigate for scroll
 import './Header.css';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
 import logo from '../assets/traydark.png';
 import LogoutModal from './LogoutModal'; // Import the modal
 
-function Header({ ingredientsRef }) {
+function Header({ ingredientsRef, recipeContainerRef, favoritedRecipesRef }) {
   const [user, setUser] = useState(null);
   const [showModal, setShowModal] = useState(false); // Modal state
-  const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -26,13 +25,17 @@ function Header({ ingredientsRef }) {
     });
   };
 
-  const handleScrollToIngredients = (e) => {
+  const handleScrollToSection = (ref, offset = 220) => (e) => {  // Default offset of 100px for the navbar
     e.preventDefault();
-    if (ingredientsRef.current) {
-      ingredientsRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (ref.current) {
+      const elementPosition = ref.current.getBoundingClientRect().top + window.pageYOffset; // Get the section's position relative to the page
+      const offsetPosition = elementPosition - offset;  // Adjust for navbar height
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
     }
-    navigate('/');
-  };
+  };  
 
   const handleScrollToTop = (e) => {
     e.preventDefault();
@@ -44,6 +47,7 @@ function Header({ ingredientsRef }) {
   };
 
   return (
+  
     <header>
       <nav>
         <div className="logo-container">
@@ -53,9 +57,10 @@ function Header({ ingredientsRef }) {
 
         <div className="nav-links-container">
           <ul>
-            <li><Link to="/"><a href="/" onClick={handleScrollToTop}>Home</a></Link></li>
-            <li><a href="/" onClick={handleScrollToIngredients}>Create</a></li>
-            <li><Link to="/history">History</Link></li>
+            <li><Link to="/" onClick={handleScrollToTop}>Home</Link></li>
+            <li><Link onClick={handleScrollToSection(favoritedRecipesRef)}>Saved</Link></li>  {/* Changed to button */}
+            <li><Link onClick={handleScrollToSection(ingredientsRef)}>Create</Link></li>  {/* Changed to button */}
+            <li><Link onClick={handleScrollToSection(recipeContainerRef)}>Recipes</Link></li>  {/* Changed to button */}
           </ul>
         </div>
 

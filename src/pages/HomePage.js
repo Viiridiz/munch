@@ -27,7 +27,7 @@ function HomePage() {
         </div>
         
         {/* Ingredients section */}
-        <div ref={ingredientsRef}>
+        <div>
           <IngredientsComponent />
         </div>
       </div>

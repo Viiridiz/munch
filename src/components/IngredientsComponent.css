@@ -337,3 +337,11 @@
 
     width: 45%;
   }
+
+  .ingredients-selection-card{
+    min-height: 100vh;
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }

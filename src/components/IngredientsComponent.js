@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { db, auth } from '../firebase';
-import { doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore"; // Firestore imports
+import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore"; // Firestore imports
 import { onAuthStateChanged } from 'firebase/auth'; // Firebase Auth for logged-in user
 import './IngredientsComponent.css';
+import Header from './Header';
 
 const IngredientsPage = () => {
   const [selectedIngredients, setSelectedIngredients] = useState([]);
@@ -13,7 +14,9 @@ const IngredientsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [favoritedRecipes, setFavoritedRecipes] = useState([]); // To store favorited recipes
   const [user, setUser] = useState(null); // Track logged-in user
+  const ingredientsRef = useRef(null);
   const recipeContainerRef = useRef(null);
+  const favoritedRecipesRef = useRef(null);
 
   const ingredients = [
     'Tomato', 'Cheese', 'Chicken', 'Fish', 'Potatoes', 'Noodles', 'Beef', 'Pork', 'Carrots',
@@ -162,10 +165,17 @@ const IngredientsPage = () => {
   };
 
   return (
-    <div className="ingredients-page">
+    <>
+    <Header
+        ingredientsRef={ingredientsRef}
+        recipeContainerRef={recipeContainerRef}
+        favoritedRecipesRef={favoritedRecipesRef}
+      />
+
+    <div className="ingredients-page" >
 
       <h1>Your <span>favourites.</span></h1>
-      <div className="favorites-container">
+      <div className="favorites-container" ref={favoritedRecipesRef}>
         {favoritedRecipes.map((recipe, index) => (
           <div key={index} className="recipe-card">
             <h3>{recipe.title}</h3>
@@ -185,12 +195,16 @@ const IngredientsPage = () => {
         ))}
       </div>
 
+    <div class="ingredients-selection-card">
+
     <h1>
       Select <span>ingredients</span> and{' '}
       <span className="go" onClick={submitIngredients}>
         munch.
       </span>
     </h1>
+
+    <div ref={ingredientsRef}></div>
 
     {/* Search bar for ingredients */}
     <input
@@ -239,9 +253,10 @@ const IngredientsPage = () => {
         </div>
       ))}
     </div>
+  </div>
 
       <h1 ref={recipeContainerRef}>The <span>recipes.</span></h1>
-      <div className="recipes-container">
+      <div className="recipes-container" ref={recipeContainerRef}>
         {recipes.map((recipe, index) => (
           <div key={index} className="recipe-card">
             <h3>{recipe.title}</h3>
@@ -289,6 +304,7 @@ const IngredientsPage = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
