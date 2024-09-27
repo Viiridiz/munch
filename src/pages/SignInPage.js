@@ -1,18 +1,17 @@
-// src/components/SignInPage.js
 import React, { useState } from 'react';
 import { auth } from '../firebase.js';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail } from 'firebase/auth';
 import './SignInPage.css';
 
 import { db } from '../firebase.js'; // Import Firestore (db)
 import { doc, setDoc } from 'firebase/firestore'; // Import Firestore methods
 
-
 function SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
+  const [resetMessage, setResetMessage] = useState(''); // For password reset message
   const navigate = useNavigate(); // Initialize navigate
 
   const handleSignUp = async () => {
@@ -32,7 +31,6 @@ function SignInPage() {
       setError(error.message); // Handle any errors during sign-up
     }
   };
-  
 
   const handleSignIn = () => {
     signInWithEmailAndPassword(auth, email, password)
@@ -46,17 +44,30 @@ function SignInPage() {
       });
   };
 
+  const handlePasswordReset = async () => {
+    if (!email) {
+      setError('Please enter your email to reset your password.');
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setResetMessage('Password reset email sent! Check your inbox.');
+      setError(null);
+    } catch (error) {
+      setError(error.message);
+      setResetMessage('');
+    }
+  };
+
   return (
     <div className="sign-in-page">
       <div className="form-container">
-        <h1 class="sign-in-title">You're one <span>munch</span> away.</h1>
+        <h1 className="sign-in-title">You're one <span>munch</span> away.</h1>
         <p>Login now to save your recipes and more!</p>
         
-        {error ? (
-          <p className="error-message show">{error}</p>
-        ) : (
-          <p className="error-message"></p>  /* Keep the container but hidden */
-        )}
+        {error && <p className="error-message show">{error}</p>}
+        {resetMessage && <p className="success-message show">{resetMessage}</p>}
 
         <div className="input-group">
           <input
@@ -76,9 +87,14 @@ function SignInPage() {
             className="input-field"
           />
         </div>
+        
         <div className="button-group">
           <button className="auth-button" onClick={handleSignIn}>Sign In</button>
           <button className="sign-up" onClick={handleSignUp}>Sign Up</button>
+        </div>
+
+        <div className="forgot-password-group">
+          <p className="forgot-password-button" onClick={handlePasswordReset}>Forgot Password?</p>
         </div>
       </div>
     </div>

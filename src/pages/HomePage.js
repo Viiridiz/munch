@@ -1,15 +1,34 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect} from 'react';
 import Header from '../components/Header';
 import IngredientsComponent from '../components/IngredientsComponent';
+import { useLocation } from 'react-router-dom';
 import './HomePage.css';
 
 function HomePage() {
   const ingredientsRef = useRef(null);
+  const location = useLocation();
 
-  const handleScrollToIngredients = (e) => {
-    e.preventDefault();  // Prevent the default link behavior
-    if (ingredientsRef.current) {
-      ingredientsRef.current.scrollIntoView({ behavior: 'smooth' });  // Scroll smoothly to ingredients section
+  useEffect(() => {
+    // Check if state contains scroll instructions and ensure ref is passed
+    if (location.state && location.state.scrollToIngredients) {
+      const ref = location.state.scrollToIngredients;
+      
+      // Introduce a delay to ensure full page load
+      const delayScroll = setTimeout(() => {
+        scrollToSection(ref);
+      }, 300); // Adjust delay if needed
+
+      return () => clearTimeout(delayScroll); // Cleanup timeout if component unmounts
+    }
+  }, [location]);
+
+  const scrollToSection = (ref) => {
+    if (ref && ref.current) {
+      const elementPosition = ref.current.getBoundingClientRect().top + window.pageYOffset;
+      window.scrollTo({
+        top: elementPosition,
+        behavior: 'smooth',
+      });
     }
   };
 
@@ -21,8 +40,7 @@ function HomePage() {
           <div className="caption-box">
             <h1>Home of your<br />next <span>munch.</span></h1>
             <p>Begin your culinary journey with munch and help <span>save 70% of wasted foods.</span></p>
-            {/* Update the 'Get Started Now' link to trigger scroll */}
-            <a href="/" onClick={handleScrollToIngredients}>Get Started Now</a>
+            <a href="/">Get Started Now</a>
           </div>
         </div>
         

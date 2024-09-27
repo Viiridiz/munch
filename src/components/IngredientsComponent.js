@@ -176,6 +176,11 @@ const IngredientsPage = () => {
 
       <h1>Your <span>favourites.</span></h1>
       <div className="favorites-container" ref={favoritedRecipesRef}>
+      <div className="empty-message">
+        {favoritedRecipes.length === 0 && (
+          <p className="empty-message">No favorited recipes yet. Start by adding some recipes to your favorites.</p>
+          )}
+      </div>
         {favoritedRecipes.map((recipe, index) => (
           <div key={index} className="recipe-card">
             <h3>{recipe.title}</h3>
@@ -195,16 +200,14 @@ const IngredientsPage = () => {
         ))}
       </div>
 
-    <div class="ingredients-selection-card">
+    <div class="ingredients-selection-card" ref={ingredientsRef}>
 
     <h1>
       Select <span>ingredients</span> and{' '}
       <span className="go" onClick={submitIngredients}>
-        munch.
+        generate.
       </span>
     </h1>
-
-    <div ref={ingredientsRef}></div>
 
     {/* Search bar for ingredients */}
     <input
@@ -212,7 +215,7 @@ const IngredientsPage = () => {
       className="ingredient-search"
       value={searchValue}
       onChange={handleSearchChange}
-      placeholder="...or search them if you are lazy"
+      placeholder="e.g. eggs, apples, chickens"
     />
 
     {filteredIngredients.length > 0 && (
@@ -229,7 +232,7 @@ const IngredientsPage = () => {
       </div>
     )}
 
-    <div className="ingredients-container">
+    {/* <div className="ingredients-container">
       {ingredients.map((ingredient) => (
         <button
           key={ingredient}
@@ -241,7 +244,7 @@ const IngredientsPage = () => {
           {ingredient}
         </button>
       ))}
-    </div>
+    </div> */}
 
     {/* Selected Ingredients Container */}
     <div className="selected-ingredients-container">
@@ -257,6 +260,11 @@ const IngredientsPage = () => {
 
       <h1 ref={recipeContainerRef}>The <span>recipes.</span></h1>
       <div className="recipes-container" ref={recipeContainerRef}>
+      <div className="empty-message">
+        {recipes.length === 0 && (
+          <p className="empty-message">No recipes generated yet. Please select ingredients and generate a recipe.</p>
+          )}
+      </div>
         {recipes.map((recipe, index) => (
           <div key={index} className="recipe-card">
             <h3>{recipe.title}</h3>

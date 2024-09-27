@@ -108,6 +108,11 @@
   .auth-button:hover {
     background-color: #085d08;
   }
+
+  .forgot-password-group{
+    cursor: pointer;
+    text-decoration: underline;
+  }
   
   @media (max-width: 480px) {
     .auth-button {

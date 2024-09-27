@@ -143,6 +143,7 @@ const IngredientsPage = () => {
         ))}
       </div>
 
+      
       {/* Display the recipes as cards */}
       <div ref={recipeContainerRef} className="recipes-container">
         {recipes.map((recipe, index) => (
