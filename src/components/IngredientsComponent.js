@@ -19,28 +19,74 @@ const IngredientsPage = () => {
   const favoritedRecipesRef = useRef(null);
 
   const ingredients = [
+    // Common Vegetables
     'Tomato', 'Cheese', 'Chicken', 'Fish', 'Potatoes', 'Noodles', 'Beef', 'Pork', 'Carrots',
     'Broccoli', 'Onion', 'Garlic', 'Lettuce', 'Cucumber', 'Spinach', 'Peas', 'Mushrooms',
     'Bell Pepper', 'Zucchini', 'Eggplant', 'Corn', 'Cauliflower', 'Asparagus', 'Sweet Potatoes',
-    'Green Beans', 'Cabbage', 'Celery', 'Avocado', 'Radishes', 'Beets', 'Lemon', 'Lime', 'Oranges',
-    'Apples', 'Bananas', 'Strawberries', 'Blueberries', 'Raspberries', 'Grapes', 'Cherries',
-    'Peaches', 'Plums', 'Pineapple', 'Mango', 'Papaya', 'Kiwi', 'Watermelon', 'Melon', 'Pumpkin',
-    'Squash', 'Yam', 'Quinoa', 'Rice', 'Barley', 'Oats', 'Millet', 'Flour', 'Bread', 'Pasta',
-    'Tortillas', 'Bagels', 'Bacon', 'Sausage', 'Ham', 'Tofu', 'Tempeh', 'Lentils', 'Chickpeas',
-    'Black Beans', 'Kidney Beans', 'Lima Beans', 'Peanuts', 'Almonds', 'Cashews', 'Walnuts',
-    'Pecans', 'Sunflower Seeds', 'Chia Seeds', 'Flax Seeds', 'Pumpkin Seeds', 'Sesame Seeds',
+    'Green Beans', 'Cabbage', 'Celery', 'Avocado', 'Radishes', 'Beets', 'Pumpkin', 'Squash', 'Yam',
+
+    // Fruits
+    'Lemon', 'Lime', 'Oranges', 'Apples', 'Bananas', 'Strawberries', 'Blueberries', 'Raspberries',
+    'Grapes', 'Cherries', 'Peaches', 'Plums', 'Pineapple', 'Mango', 'Papaya', 'Kiwi', 'Watermelon',
+    'Melon', 'Cantaloupe', 'Cranberries', 'Pomegranate',
+
+    // Grains and Breads
+    'Quinoa', 'Rice', 'Barley', 'Oats', 'Millet', 'Couscous', 'Farro', 'Flour', 'Bread', 'Pasta',
+    'Tortillas', 'Bagels', 'Naan', 'Pita Bread',
+
+    // Meats & Proteins
+    'Bacon', 'Sausage', 'Ham', 'Tofu', 'Tempeh', 'Lentils', 'Chickpeas', 'Black Beans', 'Kidney Beans',
+    'Lima Beans', 'Peanuts', 'Almonds', 'Cashews', 'Walnuts', 'Pecans', 'Sunflower Seeds', 'Chia Seeds',
+    'Flax Seeds', 'Pumpkin Seeds', 'Sesame Seeds', 'Shrimp', 'Salmon', 'Tuna', 'Crab', 'Lobster',
+    'Clams', 'Oysters', 'Scallops', 'Squid', 'Octopus', 'Duck', 'Turkey', 'Veal', 'Lamb', 'Venison',
+    'Bison', 'Goat', 'Quail', 'Rabbit', 'Frog Legs', 'Escargot', 'Caviar',
+
+    // Dairy and Dairy Alternatives
+    'Milk', 'Cream', 'Yogurt', 'Sour Cream', 'Mozzarella', 'Parmesan', 'Feta', 'Gouda', 'Brie',
+    'Swiss Cheese', 'Cream Cheese', 'Butter', 'Coconut Milk', 'Almond Milk', 'Soy Milk', 'Oat Milk',
+
+    // Oils and Fats
+    'Olive Oil', 'Coconut Oil', 'Vegetable Oil', 'Canola Oil', 'Sesame Oil', 'Butter', 'Lard', 'Ghee',
+
+    // Sauces & Condiments
+    'Soy Sauce', 'Vinegar', 'Mayonnaise', 'Ketchup', 'Mustard', 'Hot Sauce', 'Barbecue Sauce',
+    'Ranch Dressing', 'Italian Dressing', 'Sriracha', 'Salsa', 'Hummus', 'Guacamole', 'Tzatziki',
+    'Pickles', 'Olives', 'Capers', 'Sun-dried Tomatoes', 'Artichokes',
+
+    // Herbs & Spices
     'Basil', 'Oregano', 'Thyme', 'Rosemary', 'Cilantro', 'Parsley', 'Dill', 'Mint', 'Bay Leaves',
     'Cinnamon', 'Nutmeg', 'Ginger', 'Turmeric', 'Curry Powder', 'Paprika', 'Cumin', 'Coriander',
-    'Chili Powder', 'Soy Sauce', 'Vinegar', 'Olive Oil', 'Coconut Oil', 'Butter', 'Cream', 'Milk',
-    'Yogurt', 'Eggs', 'Sour Cream', 'Mozzarella', 'Parmesan', 'Feta', 'Gouda', 'Brie', 'Swiss Cheese',
-    'Cream Cheese', 'Honey', 'Maple Syrup', 'Sugar', 'Brown Sugar', 'Chocolate', 'Vanilla',
-    'Peanut Butter', 'Jelly', 'Jam', 'Mayonnaise', 'Ketchup', 'Mustard', 'Hot Sauce', 'Barbecue Sauce',
-    'Ranch Dressing', 'Italian Dressing', 'Sriracha', 'Salsa', 'Hummus', 'Guacamole', 'Tzatziki',
-    'Pickles', 'Olives', 'Capers', 'Artichokes', 'Sun-dried Tomatoes', 'Coconut', 'Almond Milk',
-    'Coconut Milk', 'Soy Milk', 'Shrimp', 'Salmon', 'Tuna', 'Crab', 'Lobster', 'Clams', 'Oysters',
-    'Scallops', 'Squid', 'Octopus', 'Duck', 'Turkey', 'Veal', 'Lamb', 'Venison', 'Bison', 'Goat',
-    'Quail', 'Rabbit', 'Frog Legs', 'Escargot', 'Caviar'
-  ];
+    'Chili Powder', 'Black Pepper', 'Salt', 'Saffron', 'Cayenne Pepper', 'Garlic Powder', 'Onion Powder',
+
+    // Sweeteners & Baking
+    'Sugar', 'Brown Sugar', 'Honey', 'Maple Syrup', 'Chocolate', 'Vanilla', 'Peanut Butter', 'Jelly',
+    'Jam', 'Molasses', 'Corn Syrup', 'Baking Soda', 'Baking Powder', 'Yeast', 'Gelatin', 'Cocoa Powder',
+
+    // Drinks & Liquid Ingredients
+    'Coffee', 'Tea', 'Coconut Water', 'Orange Juice', 'Lemon Juice', 'Lime Juice', 'Apple Juice',
+    'Sparkling Water', 'Soda Water',
+
+    // Snacks & Miscellaneous
+    'Crackers', 'Chips', 'Popcorn', 'Pretzels', 'Granola', 'Oat Bars', 'Energy Bars', 'Raisins',
+    'Dried Apricots', 'Dried Cranberries', 'Marshmallows', 'Nutella', 'Rice Cakes', 'Fruit Snacks',
+
+    // Canned and Preserved
+    'Canned Tomatoes', 'Canned Beans', 'Canned Corn', 'Canned Tuna', 'Canned Sardines', 'Canned Soup',
+    'Canned Fruit', 'Peanut Butter', 'Nut Butters', 'Canned Peas', 'Canned Fish', 'Canned Beans',
+
+    // Other
+    'Anchovies', 'Tahini', 'Miso Paste', 'Coconut Flakes', 'Breadcrumbs', 'Cornmeal', 'Polenta', 'Panko',
+
+    // More Frozen Foods
+    'Frozen Broccoli', 'Frozen Mixed Vegetables', 'Frozen Corn', 'Frozen Cauliflower',
+    'Frozen Sweet Potatoes', 'Frozen French Fries', 'Frozen Chicken Nuggets',
+    'Frozen Waffles', 'Frozen Pancakes',
+
+    // More Dairy Products
+    'Sour Cream', 'Cream Cheese', 'Neufchâtel Cheese', 'Greek Yogurt', 'Kefir',
+    'Heavy Whipping Cream', 'Clotted Cream', 'Dairy-Free Yogurt', 'Cottage Cheese'
+];
+
 
   // Listen for the authenticated user
   useEffect(() => {
