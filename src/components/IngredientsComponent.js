@@ -39,7 +39,7 @@ const IngredientsPage = () => {
     'Lima Beans', 'Peanuts', 'Almonds', 'Cashews', 'Walnuts', 'Pecans', 'Sunflower Seeds', 'Chia Seeds',
     'Flax Seeds', 'Pumpkin Seeds', 'Sesame Seeds', 'Shrimp', 'Salmon', 'Tuna', 'Crab', 'Lobster',
     'Clams', 'Oysters', 'Scallops', 'Squid', 'Octopus', 'Duck', 'Turkey', 'Veal', 'Lamb', 'Venison',
-    'Bison', 'Goat', 'Quail', 'Rabbit', 'Frog Legs', 'Escargot', 'Caviar',
+    'Bison', 'Goat', 'Quail', 'Rabbit', 'Frog Legs', 'Escargot', 'Caviar', 'Eggs', 
 
     // Dairy and Dairy Alternatives
     'Milk', 'Cream', 'Yogurt', 'Sour Cream', 'Mozzarella', 'Parmesan', 'Feta', 'Gouda', 'Brie',
