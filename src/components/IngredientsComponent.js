@@ -17,6 +17,30 @@ const IngredientsPage = () => {
   const ingredientsRef = useRef(null);
   const recipeContainerRef = useRef(null);
   const favoritedRecipesRef = useRef(null);
+  const [recipeType, setRecipeType] = useState('');
+  const [allergies, setAllergies] = useState([]);
+  const [maxTime, setMaxTime] = useState('');
+  const allergyOptions = ['Gluten', 'Nuts', 'Dairy', 'Eggs'];
+
+  // Handle recipe type selection
+  const handleRecipeTypeChange = (event) => {
+    setRecipeType(event.target.value);
+  };
+
+  // Handle allergy checkbox changes
+  const handleAllergyChange = (event) => {
+    const { value, checked } = event.target;
+    if (checked) {
+      setAllergies((prev) => [...prev, value]);
+    } else {
+      setAllergies((prev) => prev.filter((allergy) => allergy !== value));
+    }
+  };
+
+  // Handle max cooking time input change
+  const handleMaxTimeChange = (event) => {
+    setMaxTime(event.target.value);
+  };
 
   const ingredients = [
     // Common Vegetables
@@ -28,7 +52,7 @@ const IngredientsPage = () => {
     // Fruits
     'Lemon', 'Lime', 'Oranges', 'Apples', 'Bananas', 'Strawberries', 'Blueberries', 'Raspberries',
     'Grapes', 'Cherries', 'Peaches', 'Plums', 'Pineapple', 'Mango', 'Papaya', 'Kiwi', 'Watermelon',
-    'Melon', 'Cantaloupe', 'Cranberries', 'Pomegranate',
+    'Melon', 'Cantaloupe', 'Cranberries', 'Pomegranate', "Durian", "Dragonfruit",
 
     // Grains and Breads
     'Quinoa', 'Rice', 'Barley', 'Oats', 'Millet', 'Couscous', 'Farro', 'Flour', 'Bread', 'Pasta',
@@ -46,12 +70,12 @@ const IngredientsPage = () => {
     'Swiss Cheese', 'Cream Cheese', 'Butter', 'Coconut Milk', 'Almond Milk', 'Soy Milk', 'Oat Milk',
 
     // Oils and Fats
-    'Olive Oil', 'Coconut Oil', 'Vegetable Oil', 'Canola Oil', 'Sesame Oil', 'Butter', 'Lard', 'Ghee',
+    'Olive Oil', 'Coconut Oil', 'Vegetable Oil', 'Canola Oil', 'Sesame Oil','Lard', 'Ghee',
 
     // Sauces & Condiments
     'Soy Sauce', 'Vinegar', 'Mayonnaise', 'Ketchup', 'Mustard', 'Hot Sauce', 'Barbecue Sauce',
     'Ranch Dressing', 'Italian Dressing', 'Sriracha', 'Salsa', 'Hummus', 'Guacamole', 'Tzatziki',
-    'Pickles', 'Olives', 'Capers', 'Sun-dried Tomatoes', 'Artichokes',
+    'Pickles', 'Olives', 'Capers', 'Sun-dried Tomatoes', 'Artichokes', 'Truffles',
 
     // Herbs & Spices
     'Basil', 'Oregano', 'Thyme', 'Rosemary', 'Cilantro', 'Parsley', 'Dill', 'Mint', 'Bay Leaves',
@@ -72,7 +96,7 @@ const IngredientsPage = () => {
 
     // Canned and Preserved
     'Canned Tomatoes', 'Canned Beans', 'Canned Corn', 'Canned Tuna', 'Canned Sardines', 'Canned Soup',
-    'Canned Fruit', 'Peanut Butter', 'Nut Butters', 'Canned Peas', 'Canned Fish', 'Canned Beans',
+    'Canned Fruit',  'Canned Peas', 'Canned Fish', 'Canned Beans',
 
     // Other
     'Anchovies', 'Tahini', 'Miso Paste', 'Coconut Flakes', 'Breadcrumbs', 'Cornmeal', 'Polenta', 'Panko',
@@ -119,17 +143,24 @@ const IngredientsPage = () => {
 
   // Submit selected ingredients and fetch recipes
   const submitIngredients = () => {
+    const requestBody = {
+      ingredients: selectedIngredients,
+      recipeType,
+      allergies,
+      maxTime,
+    };
+  
     fetch('http://localhost:5000/generate-recipe', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ ingredients: selectedIngredients }),
+      body: JSON.stringify(requestBody),
     })
       .then((res) => res.json())
       .then((data) => {
         setRecipes(data.recipes);
-
+  
         setTimeout(() => {
           if (recipeContainerRef.current) {
             const navbarHeight =
@@ -155,13 +186,29 @@ const IngredientsPage = () => {
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchValue(value);
-
+  
     if (value) {
       const filtered = ingredients.filter((ingredient) =>
         ingredient.toLowerCase().includes(value.toLowerCase())
       );
       setFilteredIngredients(filtered);
     } else {
+      setFilteredIngredients([]);
+    }
+  };
+  
+  // Handle key press in the search input field
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter' && searchValue.trim()) {
+      const ingredient = searchValue.trim();
+      
+      // Add custom ingredient to selected ingredients
+      if (!selectedIngredients.includes(ingredient)) {
+        setSelectedIngredients((prevState) => [...prevState, ingredient]);
+      }
+  
+      // Clear the search input and filtered list
+      setSearchValue('');
       setFilteredIngredients([]);
     }
   };
@@ -248,60 +295,100 @@ const IngredientsPage = () => {
 
     <div class="ingredients-selection-card" ref={ingredientsRef}>
 
-    <h1>
-      Select <span>ingredients</span> and{' '}
+
+    <h1>Select <span>ingredients</span> and{' '}
       <span className="go" onClick={submitIngredients}>
         generate.
       </span>
     </h1>
+    
+    <div class="recipe-selection-container">
+      {/* Recipe Type Selection */}
+      <label htmlFor="recipeType" class="form-label">Select Recipe Type:</label>
+      <select
+        className="recipe-type-dropdown"
+        id="recipeType"
+        value={recipeType}
+        onChange={handleRecipeTypeChange}
+      >
+        <option value="">Any</option>
+        <option value="breakfast">Breakfast</option>
+        <option value="lunch">Lunch</option>
+        <option value="dinner">Dinner</option>
+        <option value="dessert">Dessert</option>
+      </select>
+      
+      {/* Allergy Filter */}
+    <div class="allergy-filter-container">
+      <label class="form-label">Allergies (Exclude ingredients):</label>
+      <div class="allergy-options">
+        {allergyOptions.map((allergy) => (
+          <label key={allergy} class="checkbox-label">
+            <input
+              className="allergy-filter-checkbox"
+              type="checkbox"
+              value={allergy.toLowerCase()}
+              onChange={handleAllergyChange}
+            />
+            {allergy}
+          </label>
+        ))}
+      </div>
+    </div>
 
-    {/* Search bar for ingredients */}
-    <input
-      type="text"
-      className="ingredient-search"
-      value={searchValue}
-      onChange={handleSearchChange}
-      placeholder="e.g. eggs, apples, chickens"
-    />
 
-    {filteredIngredients.length > 0 && (
-      <div className="dropdown">
-        {filteredIngredients.map((ingredient) => (
-          <div
-            key={ingredient}
-            className="dropdown-item"
-            onClick={() => handleIngredientClick(ingredient)}
-          >
-            {ingredient}
+      {/* Maximum Time */}
+      <label htmlFor="maxTime" class="form-label">Max Cooking Time (minutes):</label>
+      <input
+        className="max-time-input"
+        type="number"
+        id="maxTime"
+        value={maxTime}
+        onChange={handleMaxTimeChange}
+        placeholder="e.g. 30"
+      />
+
+      {/* Search bar for ingredients */}
+      <label htmlFor="ingredientSearch" class="form-label">Search Ingredients:</label>
+      <input
+        type="text"
+        id="ingredientSearch"
+        className="ingredient-search-input"
+        value={searchValue}
+        onChange={handleSearchChange}
+        onKeyPress={handleKeyPress}
+        placeholder="search for ingredients or make your own..."
+      />
+
+      {filteredIngredients.length > 0 && (
+        <div className="dropdown-menu">
+          {filteredIngredients.map((ingredient) => (
+            <div
+              key={ingredient}
+              className="dropdown-item"
+              onClick={() => handleIngredientClick(ingredient)}
+            >
+              {ingredient}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Selected Ingredients */}
+      <div className="selected-ingredients-container">
+        {selectedIngredients.map((ingredient) => (
+          <div key={ingredient} className="ingredient-card selected-ingredient">
+            <button
+              className="remove-ingredient-button"
+              onClick={() => removeSelectedIngredient(ingredient)}
+            >
+              {ingredient}
+            </button>
           </div>
         ))}
       </div>
-    )}
-
-    {/* <div className="ingredients-container">
-      {ingredients.map((ingredient) => (
-        <button
-          key={ingredient}
-          className={`ingredient-button ${
-            selectedIngredients.includes(ingredient) ? 'selected' : ''
-          }`}
-          onClick={() => toggleIngredient(ingredient)}
-        >
-          {ingredient}
-        </button>
-      ))}
-    </div> */}
-
-    {/* Selected Ingredients Container */}
-    <div className="selected-ingredients-container">
-      {selectedIngredients.map((ingredient) => (
-        <div key={ingredient} className="ingredient-card selected-ingredient">
-          <button onClick={() => removeSelectedIngredient(ingredient)}>
-            {ingredient}
-          </button>
-        </div>
-      ))}
     </div>
+
   </div>
 
       <h1 ref={recipeContainerRef}>The <span>recipes.</span></h1>

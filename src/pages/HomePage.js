@@ -40,7 +40,6 @@ function HomePage() {
           <div className="caption-box">
             <h1>Home of your<br />next <span>munch.</span></h1>
             <p>Begin your culinary journey with munch and help <span>save 70% of wasted foods.</span></p>
-            <a href="/">Get Started Now</a>
           </div>
         </div>
         
