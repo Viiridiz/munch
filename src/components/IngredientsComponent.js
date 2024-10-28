@@ -159,7 +159,8 @@ const IngredientsPage = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        setRecipes(data.recipes);
+        // Confirm data.recipes is an array
+        setRecipes(Array.isArray(data.recipes) ? data.recipes : []);
   
         setTimeout(() => {
           if (recipeContainerRef.current) {
@@ -357,7 +358,7 @@ const IngredientsPage = () => {
         value={searchValue}
         onChange={handleSearchChange}
         onKeyPress={handleKeyPress}
-        placeholder="search for ingredients or make your own..."
+        placeholder="Search for ingredients or make your own..."
       />
 
       {filteredIngredients.length > 0 && (
