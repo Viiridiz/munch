@@ -21,6 +21,7 @@ const IngredientsPage = () => {
   const [allergies, setAllergies] = useState([]);
   const [maxTime, setMaxTime] = useState('');
   const allergyOptions = ['Gluten', 'Nuts', 'Dairy', 'Eggs'];
+  const [loading, setLoading] = useState(false);
 
   // Handle recipe type selection
   const handleRecipeTypeChange = (event) => {
@@ -143,6 +144,8 @@ const IngredientsPage = () => {
 
   // Submit selected ingredients and fetch recipes
   const submitIngredients = () => {
+    setLoading(true); // Start loading
+  
     const requestBody = {
       ingredients: selectedIngredients,
       recipeType,
@@ -159,15 +162,13 @@ const IngredientsPage = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        // Confirm data.recipes is an array
         setRecipes(Array.isArray(data.recipes) ? data.recipes : []);
+        setLoading(false); // Stop loading once data is received
   
         setTimeout(() => {
           if (recipeContainerRef.current) {
-            const navbarHeight =
-              document.querySelector('.navbar')?.offsetHeight || 0;
-            const scrollPosition =
-              recipeContainerRef.current.offsetTop - navbarHeight - 120;
+            const navbarHeight = document.querySelector('.navbar')?.offsetHeight || 0;
+            const scrollPosition = recipeContainerRef.current.offsetTop - navbarHeight - 120;
             window.scrollTo({
               top: scrollPosition,
               behavior: 'smooth',
@@ -175,8 +176,12 @@ const IngredientsPage = () => {
           }
         }, 300);
       })
-      .catch((err) => console.error('Error:', err));
+      .catch((err) => {
+        console.error('Error:', err);
+        setLoading(false); // Stop loading if there's an error
+      });
   };
+  
 
   const removeSelectedIngredient = (ingredient) => {
     setSelectedIngredients((prevState) =>
@@ -220,6 +225,12 @@ const IngredientsPage = () => {
     setFilteredIngredients([]);
   };
 
+  const handleRetry = () => {
+    setRecipes([]);  // Clear current recipes
+    submitIngredients();  // Fetch a new recipe
+  };
+  
+
   // Handle favoriting a recipe
   const toggleFavoriteRecipe = async (recipe) => {
     if (!user) {
@@ -260,6 +271,12 @@ const IngredientsPage = () => {
 
   return (
     <>
+    {loading && (
+      <div className="loading-screen">
+        <p>Loading recipes...</p>
+      </div>
+    )}
+    
     <Header
         ingredientsRef={ingredientsRef}
         recipeContainerRef={recipeContainerRef}
@@ -401,20 +418,19 @@ const IngredientsPage = () => {
       </div>
         {recipes.map((recipe, index) => (
           <div key={index} className="recipe-card">
-            <h3>{recipe.title}</h3>
-            <p>Cooking Time: {recipe.cooking_time}</p>
-            <p>Servings: {recipe.servings}</p>
-
-            <div className="button-container">
+          <h3>{recipe.title}</h3>
+          <p>Cooking Time: {recipe.cooking_time}</p>
+          <p>Servings: {recipe.servings}</p>
+        
+          <div className="button-container">
             <button onClick={() => handleRecipeClick(recipe)}>View Recipe</button>
-              {/* Favorite button */}
-              <button onClick={() => toggleFavoriteRecipe(recipe)}>
-                {favoritedRecipes.some((r) => r.title === recipe.title)
-                  ? 'Unfavorite'
-                  : 'Favorite'}
-              </button>
-            </div>
+            <button onClick={() => toggleFavoriteRecipe(recipe)}>
+              {favoritedRecipes.some((r) => r.title === recipe.title) ? 'Unfavorite' : 'Favorite'}
+            </button>
+            <button onClick={handleRetry}>Retry</button> {/* Retry Button */}
           </div>
+        </div>
+        
         ))}
       </div>
 

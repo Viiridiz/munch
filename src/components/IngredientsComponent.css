@@ -449,3 +449,29 @@
   .ingredient-item{
     width: 50px;
   }
+
+  .loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Ensure it appears on top of everything */
+  }
+  
+  .loading-screen p {
+    font-size: 2rem;
+    color: #0b3d0b ;
+    padding: 2rem;
+    background-color: white;
+    box-shadow: #000000 0px 0px 10px;
+    border-radius: .5rem;
+    text-align: center;
+    font-family:'Times New Roman', Times, serif;
+  }
+  
+  
