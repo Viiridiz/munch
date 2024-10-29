@@ -427,9 +427,9 @@ const IngredientsPage = () => {
             </span>
             <h2>{selectedRecipe.title}</h2>
             <h3>Ingredients</h3>
-            <ul>
+            <ul class="ingredients-list">
               {selectedRecipe.ingredients.map((ingredient, index) => (
-                <li key={index}>
+                <li key={index} className="ingredient-item">
                   {ingredient.quantity} {ingredient.unit} {ingredient.name}
                 </li>
               ))}

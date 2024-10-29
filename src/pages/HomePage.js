@@ -47,6 +47,7 @@ function HomePage() {
         <div>
           <IngredientsComponent />
         </div>
+
       </div>
     </>
   );

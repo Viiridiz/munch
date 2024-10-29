@@ -435,3 +435,17 @@
     gap: 10px;
     width: 80%;
   }
+
+  .ingredients-list {
+    max-width: 100%;
+    overflow-x: scroll;
+    font-size: 15px;
+  }
+  
+  .ingredients-list::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Edge */
+  }
+  
+  .ingredient-item{
+    width: 50px;
+  }
