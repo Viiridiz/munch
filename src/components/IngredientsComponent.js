@@ -274,9 +274,10 @@ const IngredientsPage = () => {
     <>
     {loading && (
       <div className="loading-screen">
-        <p>Loading recipes...</p>
+        <div className="spinner"></div>
       </div>
     )}
+
     
     <Header
         ingredientsRef={ingredientsRef}
@@ -463,9 +464,9 @@ const IngredientsPage = () => {
               ))}
             </ol>
             <div className="cooking-time-container">
-              <p><strong>Cooking Time:</strong> {selectedRecipe.cooking_time} minutes</p>
+              <p><strong>Cooking Time:</strong> {selectedRecipe.cooking_time}</p>
               {/* Timer Component */}
-              <Timer duration={selectedRecipe.cooking_time} />
+              <Timer duration={parseInt(selectedRecipe.cooking_time.match(/\d+/)?.[0] || 0, 10)} />
             </div>
           </div>
         </div>

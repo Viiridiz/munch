@@ -490,16 +490,25 @@
     z-index: 9999; /* Ensure it appears on top of everything */
   }
   
-  .loading-screen p {
-    font-size: 2rem;
-    color: black ;
-    padding: 2rem;
-    background-color: rgb(255, 255, 255);
-    box-shadow: #000000 0px 0px 10px;
-    border-radius: .5rem;
-    text-align: center;
-    font-family:'Times New Roman', Times, serif;
+  .spinner {
+    width: 50px; /* Adjust size as needed */
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.3); /* Light border */
+    border-top: 5px solid white; /* Highlighted border for spinning effect */
+    border-radius: 50%;
+    animation: spin 1s linear infinite; /* Animation */
   }
+  
+  /* Define spin animation */
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
 
   /* Healthy Meter*/
   .modal-content p {
