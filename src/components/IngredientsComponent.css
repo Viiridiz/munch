@@ -89,7 +89,7 @@
     flex-direction: column;
     background-color: #fff;
     border: 1px solid #166d16;
-    border-radius: 8px;
+    border-radius: 1rem;
     padding: 50px;
     margin: 10px;
     width: 350px;
@@ -98,6 +98,10 @@
     align-items: center;
     justify-content: center;
     transition: ease-in-out 0.1s;
+    max-width: 100%;
+    background-color: #fafafa;
+    border-radius: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
   .recipe-card button{
@@ -362,11 +366,15 @@
 
   .recipe-type-dropdown, .max-time-input, .ingredient-search-input {
     width: 100%;
-    padding: 10px;
+    padding: 1rem 0.5rem;
     margin: 5px 0;
     border-radius: 1rem;
     border: 1px solid #ccc;
     font-size: 15px;
+    max-width: 100%;
+    background-color: #fafafa;
+    border-radius: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
   
   .dropdown-menu {
@@ -390,13 +398,14 @@
   display: flex;
   flex-wrap: wrap;
   gap: 10px; /* Adjust gap between each allergy option */
+  padding: 1rem 0;
 }
 
 .checkbox-label {
   display: flex;
   align-items: center;
   margin-right: 15px; /* Add some space between checkboxes */
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .allergy-filter-checkbox {
@@ -440,9 +449,27 @@
     max-width: 100%;
     overflow-x: scroll;
     font-size: 15px;
+    background-color: #fafafa;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .instructions-list{
+    max-width: 100%;
+    font-size: 15px;
+    background-color: #fafafa;
+    border-radius: 1rem;
+    padding: 1rem;
+    overflow-y: scroll;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding-left: 30px;
   }
   
   .ingredients-list::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Edge */
+  }
+  .instructions-list::-webkit-scrollbar {
     display: none; /* For Chrome, Safari, and Edge */
   }
   
@@ -465,13 +492,62 @@
   
   .loading-screen p {
     font-size: 2rem;
-    color: #0b3d0b ;
+    color: black ;
     padding: 2rem;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     box-shadow: #000000 0px 0px 10px;
     border-radius: .5rem;
     text-align: center;
     font-family:'Times New Roman', Times, serif;
+  }
+
+  /* Healthy Meter*/
+  .modal-content p {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 17px;
+    border-radius: 1rem;
+    width: fit-content;
+    margin-top: 10px;
+  }
+  
+  .healthy-meter-1 {
+    color: rgb(104, 0, 0);
+  }
+  
+  .healthy-meter-2 {
+    color: rgb(116, 76, 1);
+  }
+  
+  .healthy-meter-3 {
+    color: rgb(95, 95, 0);
+  }
+  
+  .healthy-meter-4 {
+    color: rgb(53, 144, 53);
+  }
+  
+  .healthy-meter-5 {
+    color: rgb(0, 86, 0);
+  }
+
+  .recipe-container-details{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    max-width: 100%;
+    background-color: #fafafa;
+    border-radius: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: .5rem 0;
+  }
+
+  .cooking-time-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* Space between the text and the timer */
   }
   
   

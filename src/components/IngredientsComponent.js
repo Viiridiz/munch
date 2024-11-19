@@ -4,6 +4,7 @@ import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from "firebase/firest
 import { onAuthStateChanged } from 'firebase/auth'; // Firebase Auth for logged-in user
 import './IngredientsComponent.css';
 import Header from './Header';
+import Timer from './Timer';
 
 const IngredientsPage = () => {
   const [selectedIngredients, setSelectedIngredients] = useState([]);
@@ -22,7 +23,6 @@ const IngredientsPage = () => {
   const [maxTime, setMaxTime] = useState('');
   const allergyOptions = ['Gluten', 'Nuts', 'Dairy', 'Eggs'];
   const [loading, setLoading] = useState(false);
-
   // Handle recipe type selection
   const handleRecipeTypeChange = (event) => {
     setRecipeType(event.target.value);
@@ -260,14 +260,15 @@ const IngredientsPage = () => {
 
   // Handle recipe click to open the modal
   const handleRecipeClick = (recipe) => {
-    setSelectedRecipe(recipe);
-    setIsModalOpen(true);
+    setSelectedRecipe(recipe); // Set the selected recipe
+    setIsModalOpen(true); // Open the modal
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedRecipe(null);
   };
+  
 
   return (
     <>
@@ -285,11 +286,11 @@ const IngredientsPage = () => {
 
     <div className="ingredients-page" >
 
-      <h1>Your <span>favourites.</span></h1>
+      <h1>Your <span>saved recipes.</span></h1>
       <div className="favorites-container" ref={favoritedRecipesRef}>
       <div className="empty-message">
         {favoritedRecipes.length === 0 && (
-          <p className="empty-message">No favorited recipes yet. Start by adding some recipes to your favorites.</p>
+          <p className="empty-message">No saved recipes yet. Start by adding some recipes to your saved.</p>
           )}
       </div>
         {favoritedRecipes.map((recipe, index) => (
@@ -303,8 +304,8 @@ const IngredientsPage = () => {
               {/* Favorite button */}
               <button onClick={() => toggleFavoriteRecipe(recipe)}>
                 {favoritedRecipes.some((r) => r.title === recipe.title)
-                  ? 'Unfavorite'
-                  : 'Favorite'}
+                  ? 'Unsave'
+                  : 'Save'}
               </button>
             </div>
           </div>
@@ -425,7 +426,7 @@ const IngredientsPage = () => {
           <div className="button-container">
             <button onClick={() => handleRecipeClick(recipe)}>View Recipe</button>
             <button onClick={() => toggleFavoriteRecipe(recipe)}>
-              {favoritedRecipes.some((r) => r.title === recipe.title) ? 'Unfavorite' : 'Favorite'}
+              {favoritedRecipes.some((r) => r.title === recipe.title) ? 'Unsave' : 'Save'}
             </button>
             <button onClick={handleRetry}>Retry</button> {/* Retry Button */}
           </div>
@@ -438,12 +439,17 @@ const IngredientsPage = () => {
       {isModalOpen && selectedRecipe && (
         <div className="modal">
           <div className="modal-content">
-            <span className="close-button" onClick={closeModal}>
-              &times;
-            </span>
+            <span className="close-button" onClick={closeModal}>&times;</span>
             <h2>{selectedRecipe.title}</h2>
+            <div className="recipe-container-details">
+              <p className={`healthy-meter healthy-meter-${selectedRecipe.healthyMeter.toLowerCase()}`}>
+                <strong>Healthy Meter:</strong> {selectedRecipe.healthyMeter}
+              </p>
+              <p><strong>{selectedRecipe.Kcal} Kcal</strong></p>
+              <p><strong>Servings:</strong> {selectedRecipe.servings}</p>
+            </div>
             <h3>Ingredients</h3>
-            <ul class="ingredients-list">
+            <ul className="ingredients-list">
               {selectedRecipe.ingredients.map((ingredient, index) => (
                 <li key={index} className="ingredient-item">
                   {ingredient.quantity} {ingredient.unit} {ingredient.name}
@@ -451,16 +457,20 @@ const IngredientsPage = () => {
               ))}
             </ul>
             <h3>Instructions</h3>
-            <ol>
+            <ol className="instructions-list">
               {selectedRecipe.instructions.map((instruction, index) => (
                 <li key={index}>{instruction}</li>
               ))}
             </ol>
-            <p>Cooking Time: {selectedRecipe.cooking_time}</p>
-            <p>Servings: {selectedRecipe.servings}</p>
+            <div className="cooking-time-container">
+              <p><strong>Cooking Time:</strong> {selectedRecipe.cooking_time} minutes</p>
+              {/* Timer Component */}
+              <Timer duration={selectedRecipe.cooking_time} />
+            </div>
           </div>
         </div>
       )}
+
     </div>
     </>
   );
