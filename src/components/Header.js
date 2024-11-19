@@ -4,14 +4,14 @@
   import { auth } from '../firebase';
   import { signOut } from 'firebase/auth';
   import logo from '../assets/traydark.png';
-  import LogoutModal from './LogoutModal';
+  import UserMenu from './UserMenu';
   
   function Header({ ingredientsRef, recipeContainerRef, favoritedRecipesRef }) {
     const [user, setUser] = useState(null);
-    const [showModal, setShowModal] = useState(false); // Modal state
+    const [username, setUsername] = useState('');
+    const [setShowModal] = useState(false); // Modal state
     const navigate = useNavigate();  // Initialize navigate
     const location = useLocation();  // Get the current location
-    const isActive = (path) => location.pathname === path;
 
     const [activeSection, setActiveSection] = useState('');
 
@@ -111,9 +111,6 @@
       }
     }; 
   
-    const handleLogoutClick = () => {
-      setShowModal(true); // Show the modal
-    };
   
     return (
       <header>
@@ -164,20 +161,20 @@
           </div>
   
           <div className="auth-container">
-            {user ? (
-              <span onClick={handleLogoutClick}>{user.email} (Sign Out)</span>
-            ) : (
-              <span><Link to="/signin">Sign In</Link></span>
-            )}
-          </div>
+          {user ? (
+            <>
+              <UserMenu
+                user={user}
+                onLogout={handleSignOut}
+                setUsernameInHeader={setUsername} // Pass username setter
+              />
+            </>
+          ) : (
+            <span><Link to="/signin">Sign In</Link></span>
+          )}
+        </div>
         </nav>
-  
-        {showModal && (
-          <LogoutModal
-            onClose={() => setShowModal(false)} 
-            onConfirm={handleSignOut} 
-          />
-        )}
+
       </header>
     );
   }
