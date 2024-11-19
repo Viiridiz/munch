@@ -10,7 +10,7 @@ nav {
   box-sizing: border-box;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.23);
   height: 80px; /* Fixed height */
-  padding: 0 1rem; /* Side padding */
+  padding: 0 4rem; /* Side padding */
 }
 
 .logo-container {
@@ -56,11 +56,15 @@ nav h1 {
 }
 
 nav ul li a, 
-nav h1 a, 
 nav span a {
   text-decoration: none; /* Remove underline */
   color: black; /* Set text color */
   cursor: pointer;
+}
+
+nav h1 a{
+  color: #0b3d0b;
+  text-decoration: none;
 }
 
 nav ul li a:hover, 
@@ -69,3 +73,20 @@ nav span a:hover {
   color: #0b3d0b; /* Dark forest green on hover */
   cursor: pointer;
 }
+
+.nav-links-container ul li .active {
+  border-bottom: 2px solid #0b3d0b;
+  padding-bottom: 4px;
+  transition: border-bottom-color 0.3s ease, padding-bottom 0.3s ease;
+}
+
+.nav-links-container ul li a {
+  border-bottom: 2px solid transparent; /* Default invisible underline */
+  padding-bottom: 4px;
+  transition: border-bottom-color 0.2s ease, padding-bottom 0.2s ease;
+}
+
+.nav-links-container ul li a:hover {
+  border-bottom-color: #0b3d0b; /* Optional hover effect */
+}
+

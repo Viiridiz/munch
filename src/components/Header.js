@@ -11,6 +11,38 @@
     const [showModal, setShowModal] = useState(false); // Modal state
     const navigate = useNavigate();  // Initialize navigate
     const location = useLocation();  // Get the current location
+    const isActive = (path) => location.pathname === path;
+
+    const [activeSection, setActiveSection] = useState('');
+
+    useEffect(() => {
+      const handleScroll = () => {
+        const sections = [
+          { id: 'home', ref: null },
+          { id: 'saved', ref: favoritedRecipesRef },
+          { id: 'create', ref: ingredientsRef },
+          { id: 'recipes', ref: recipeContainerRef },
+        ];
+    
+        let currentSection = 'home'; // Default section
+        sections.forEach((section) => {
+          if (
+            section.ref &&
+            section.ref.current &&
+            section.ref.current.getBoundingClientRect().top <= 270 // Offset with buffer
+          ) {
+            currentSection = section.id;
+          }
+        });
+    
+        setActiveSection(currentSection);
+      };
+    
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
+    }, [favoritedRecipesRef, ingredientsRef, recipeContainerRef]);
+    
+
   
     useEffect(() => {
       const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -93,10 +125,41 @@
   
           <div className="nav-links-container">
             <ul>
-              <li><Link to="/" onClick={handleScrollToTop}>Home</Link></li>
-              <li><Link onClick={handleNavigationAndScroll(favoritedRecipesRef)}>Saved</Link></li>
-              <li><Link onClick={handleNavigationAndScrollIngredients(ingredientsRef)}>Create</Link></li>
-              <li><Link onClick={handleNavigationAndScroll(recipeContainerRef)}>Recipes</Link></li>
+            <li>
+              <Link
+                to="/"
+                onClick={handleScrollToTop}
+                className={activeSection === 'home' ? 'active' : ''}
+              >
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link
+                onClick={handleNavigationAndScroll(favoritedRecipesRef)}
+                className={activeSection === 'saved' ? 'active' : ''}
+              >
+                Saved
+              </Link>
+            </li>
+            <li>
+              <Link
+                onClick={handleNavigationAndScrollIngredients(ingredientsRef)}
+                className={activeSection === 'create' ? 'active' : ''}
+              >
+                Create
+              </Link>
+            </li>
+            <li>
+              <Link
+                onClick={handleNavigationAndScroll(recipeContainerRef)}
+                className={activeSection === 'recipes' ? 'active' : ''}
+              >
+                Recipes
+              </Link>
+            </li>
+
+
             </ul>
           </div>
   
