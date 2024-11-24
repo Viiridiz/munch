@@ -6,7 +6,7 @@ const Footer = () => {
     <footer className="footer">
       <p>&copy; {new Date().getFullYear()} MUNCH. All rights reserved.</p>
       <p>
-        Akeyla Mashka Shareef
+        Akeyla Shareef
       </p>
     </footer>
   );

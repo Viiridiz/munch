@@ -5,6 +5,7 @@ import { onAuthStateChanged } from 'firebase/auth'; // Firebase Auth for logged-
 import './IngredientsComponent.css';
 import Header from './Header';
 import Timer from './Timer';
+import Footer from './Footer';
 
 const IngredientsPage = () => {
   const [selectedIngredients, setSelectedIngredients] = useState([]);
@@ -22,6 +23,7 @@ const IngredientsPage = () => {
   const [allergies, setAllergies] = useState([]);
   const [maxTime, setMaxTime] = useState('');
   const allergyOptions = ['Gluten', 'Nuts', 'Dairy', 'Eggs'];
+  const [isClosing, setIsClosing] = useState(false);
   const [loading, setLoading] = useState(false);
   // Handle recipe type selection
   const handleRecipeTypeChange = (event) => {
@@ -141,6 +143,8 @@ const IngredientsPage = () => {
         : [...prevState, ingredient]
     );
   };
+
+  
 
   // Submit selected ingredients and fetch recipes
   const submitIngredients = () => {
@@ -265,10 +269,13 @@ const IngredientsPage = () => {
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedRecipe(null);
+    setIsClosing(true); // Trigger the closing animation
+    setTimeout(() => {
+      setIsModalOpen(false); // Close the modal after the animation
+      setSelectedRecipe(null); // Clear the selected recipe
+      setIsClosing(false); // Reset the closing state
+    }, 300); // Match the duration of the `scaleOut` animation
   };
-  
 
   return (
     <>
@@ -439,7 +446,7 @@ const IngredientsPage = () => {
       {/* Modal for showing detailed recipe information */}
       {isModalOpen && selectedRecipe && (
         <div className="modal">
-          <div className="modal-content">
+          <div className={`modal-content ${isClosing ? 'closing' : ''}`}>
             <span className="close-button" onClick={closeModal}>&times;</span>
             <h2>{selectedRecipe.title}</h2>
             <div className="recipe-container-details">
@@ -471,6 +478,10 @@ const IngredientsPage = () => {
           </div>
         </div>
       )}
+
+      <div className="footer">
+        <Footer></Footer>
+      </div>
 
     </div>
     </>

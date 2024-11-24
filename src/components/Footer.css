@@ -1,15 +1,17 @@
 /* Footer.css */
 .footer {
-    background-color: #2c3e50; /* Dark background */
+    background-color: #ffffff;
     color: #fff;
     text-align: center;
-    padding: 10px 0;
+    padding: 20px 0;
     bottom: 0;
     width: 100%;
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   
   .footer p {
     margin: 5px;
+    color: rgb(123, 123, 123);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
   

@@ -53,8 +53,7 @@
   
     const handleSignOut = () => {
       signOut(auth).then(() => {
-        console.log('User signed out');
-        setShowModal(false); // Close modal after logout
+        console.log('User signed out'); // Close modal after logout
         window.location.reload(); // Refresh the page
       });
     };
