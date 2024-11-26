@@ -158,6 +158,7 @@
 
             </ul>
           </div>
+          
   
           <div className="auth-container">
           {user ? (

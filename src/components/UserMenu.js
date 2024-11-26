@@ -7,7 +7,6 @@ const UserMenu = ({ user, onLogout, setUsernameInHeader }) => {
     const [showMenu, setShowMenu] = useState(false);
     const [username, setUsername] = useState('');
     const [isEditingUsername, setIsEditingUsername] = useState(false);
-    const [isNightMode, setIsNightMode] = useState(false);
   
     useEffect(() => {
       if (user) {
@@ -18,7 +17,6 @@ const UserMenu = ({ user, onLogout, setUsernameInHeader }) => {
             const data = docSnap.data();
             const fetchedUsername = data.username || '';
             setUsername(fetchedUsername);
-            setIsNightMode(data.nightMode || false);
   
             // Update the header with the username
             setUsernameInHeader(fetchedUsername);
@@ -39,15 +37,6 @@ const UserMenu = ({ user, onLogout, setUsernameInHeader }) => {
         // Update the header with the new username
         setUsernameInHeader(username);
       }
-    };
-  
-    const toggleNightMode = async () => {
-      setIsNightMode(!isNightMode);
-      if (user) {
-        const userDoc = doc(db, 'users', user.uid);
-        await updateDoc(userDoc, { nightMode: !isNightMode });
-      }
-      document.body.classList.toggle('night-mode', !isNightMode);
     };
   
     return (
@@ -77,16 +66,6 @@ const UserMenu = ({ user, onLogout, setUsernameInHeader }) => {
             <button className="logout-button" onClick={onLogout}>
               Log Out
             </button>
-            <div className="user-settings">
-              <label>
-                <input
-                  type="checkbox"
-                  checked={isNightMode}
-                  onChange={toggleNightMode}
-                />
-                Night Mode
-              </label>
-            </div>
           </div>
         )}
       </div>

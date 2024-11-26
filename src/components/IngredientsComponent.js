@@ -8,7 +8,7 @@ import Timer from './Timer';
 import Footer from './Footer';
 
 const IngredientsPage = () => {
-  const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const [selectedIngredients,                       setSelectedIngredients] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const [searchValue, setSearchValue] = useState('');
   const [filteredIngredients, setFilteredIngredients] = useState([]);
@@ -29,6 +29,29 @@ const IngredientsPage = () => {
   const handleRecipeTypeChange = (event) => {
     setRecipeType(event.target.value);
   };
+
+  const handleQuickAdd = () => {
+    const commonIngredients = [
+      "Eggs",
+      "Milk",
+      "Butter",
+      "Cheese",
+      "Bread",
+      "Tomatoes",
+      "Onions",
+      "Garlic",
+      "Salt",
+      "Pepper",
+    ];
+  
+    // Add ingredients only if they're not already selected
+    const newIngredients = commonIngredients.filter(
+      (ingredient) => !selectedIngredients.includes(ingredient)
+    );
+  
+    setSelectedIngredients([...selectedIngredients, ...newIngredients]);
+  };
+  
 
   // Handle allergy checkbox changes
   const handleAllergyChange = (event) => {
@@ -377,6 +400,7 @@ const IngredientsPage = () => {
 
       {/* Search bar for ingredients */}
       <label htmlFor="ingredientSearch" class="form-label">Search Ingredients:</label>
+      <span>
       <input
         type="text"
         id="ingredientSearch"
@@ -385,7 +409,13 @@ const IngredientsPage = () => {
         onChange={handleSearchChange}
         onKeyPress={handleKeyPress}
         placeholder="Search for ingredients or make your own..."
-      />
+      />{/* Quick Add Button */}
+      <button 
+        className="quick-add-button" 
+        onClick={handleQuickAdd}
+      >
+        Quick Add Ingredients
+      </button></span>
 
       {filteredIngredients.length > 0 && (
         <div className="dropdown-menu">
