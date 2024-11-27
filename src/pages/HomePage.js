@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import IngredientsComponent from '../components/IngredientsComponent';
 import { useLocation } from 'react-router-dom';
 import './HomePage.css';
+import BackgroundMusic from '../components/BackgroundMusic';
 
 function HomePage() {
   const ingredientsRef = useRef(null);
@@ -34,6 +35,7 @@ function HomePage() {
 
   return (
     <>
+    <BackgroundMusic />
       <Header ingredientsRef={ingredientsRef} /> {/* Pass ingredientsRef as a prop */}
       <div className="homepage">
         <div className="top-panel">
